@@ -1,0 +1,3107 @@
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Powershell Hardening
+      vulnType: Pentest
+      description: >-
+        <p>PowerShell is a task automation and configuration management
+        framework developed by Microsoft, consisting of a command-line shell and
+        associated scripting language built on the .NET framework. It was
+        designed to provide a more efficient and effective way for Windows
+        administrators to manage and automate various system administration
+        tasks, including managing the Windows operating system and other
+        Microsoft products such as Exchange, SharePoint, and SQL
+        Server.<br><br>PowerShell is often used by adversaries because it
+        provides them with a built-in versatile tool for executing malicious
+        scripts and commands, bypassing security controls, accessing sensitive
+        information, and hiding their actions, making it an attractive tool for
+        malicious actors.<br><br>There are several steps that can be taken to
+        harden the way PowerShell can act on a system or in specific user
+        context:<br></p><ul><li><p>Restrict the Language Mode</p><p>The
+        PowerShell language mode determines the syntax, language elements, and
+        behavior of PowerShell scripts, with the two main modes being "Full" and
+        "Constrained" that can be used to restrict the capabilities of
+        PowerShell scripts for security and administrative
+        purposes.</p></li><li><p>Set an Execution Policy</p><p>The PowerShell
+        execution policy is a security feature that determines what types of
+        PowerShell scripts can run on a system and is used to help protect
+        against malicious scripts by restricting the execution of scripts from
+        unknown or untrusted sources.</p></li><li><p>Uninstall old PowerShell
+        versions</p><p>PowerShell version 5 and above has important built-in
+        security features that make it safer to use in enterprise environments.
+        For example, PowerShell v5 logs every script that is run, making it
+        easier to trace the execution of malware. <br>These security features
+        are not present in PowerShell v2.0, making it less secure, which at the
+        same time makes it a lucrative alternative for
+        attackers.</p></li></ul><p></p>
+      observation: >-
+        <p>Language Mode Failure = Medium<br>Execution Policy =
+        Low<br>PowerShell v2 = High</p>
+      remediation: >-
+        <p>Set the Language Mode to <em>Restricted</em>. This can be activated
+        locally:</p><pre><code>[Environment]::SetEnvironmentVariable(‘__PSLockdownPolicy‘,
+        ‘4’, ‘Machine‘)</code></pre><p>Or via Group Policies
+        Objects:</p><p><em>Computer Configuration\Preferences\Windows
+        Settings\Environment</em><br></p><img class="custom-image"
+        src="63e504b947c5530011586cfc" alt="Setting PowerShell Language Mode via
+        GPO"><p></p><p>Set the Execution Policy to <em>AllSigned</em>. This can
+        be done via GPO here: <em>Computer Configuration &gt; Policies &gt;
+        Administrative Templates &gt; Windows Components &gt; Windows
+        PowerShell</em><br></p><img class="custom-image"
+        src="63e505c447c5530011586cfd" alt="Setting Execution Policy for
+        PowerShell via GPO"><p><br><br>Deactivate PowerShell v2.0 via GPO or
+        remove it locally via the "Windows Features".</p>
+      references:
+        - 'https://adsecurity.org/?p=2604'
+        - >-
+          https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.3
+        - >-
+          https://learn.microsoft.com/en-us/powershell/scripting/learn/security-features?view=powershell-7.3
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: EN
+      title: DMA Attacks
+      description: >-
+        <p>DMA (Direct Memory Access) attacks are a class of security threats
+        that exploit the DMA feature present in many computer systems. DMA
+        allows hardware devices, such as network cards or USB controllers, to
+        access the system's memory directly without involving the CPU, enabling
+        faster data transfers.</p><p>In a DMA attack, an attacker gains physical
+        or remote access to a target system and leverages DMA capabilities to
+        directly read from or write to the system's memory. This access allows
+        the attacker to bypass traditional security measures, such as operating
+        system permissions or encryption, and potentially gain unauthorized
+        access to sensitive data or compromise the system's
+        integrity.</p><p>There are two main types of DMA
+        attacks:</p><ol><li><p>DMA Read Attacks: In this type of attack, the
+        attacker gains access to the system's memory and can read sensitive
+        information stored in the memory, including encryption keys, passwords,
+        or confidential data. The attacker can then use this information for
+        unauthorized purposes.</p></li><li><p>DMA Write Attacks: In a DMA write
+        attack, the attacker injects malicious data or code into the system's
+        memory, potentially overwriting critical data or modifying the system's
+        behavior. This can lead to unauthorized privilege escalation, injection
+        of malware, or modification of system settings.</p></li></ol><p>DMA
+        attacks can be executed through various means, including physical access
+        to the target system, compromised peripheral devices, or exploiting
+        vulnerabilities in system firmware or drivers. Some examples of DMA
+        attack vectors include FireWire, Thunderbolt, PCI Express, or PCMCIA
+        interfaces.</p>
+      remediation: >-
+        <p>Apply according counter measures via GPO (please also refer to the
+        references):<br><br>Firewire: <br><code>Computer Configuration &gt;
+        Administrative Templates &gt; System &gt; Device Installation &gt;
+        Device Installation Restrictions &gt; Prevent installation of devices
+        using drivers that match these device setup classes</code></p><p>Add the
+        following entries:</p><table><tbody><tr><th colspan="1"
+        rowspan="1"><p><strong>GUID</strong></p></th></tr><tr><td colspan="1"
+        rowspan="1"><p><strong>{7ebefbc0-3200-11d2-b4c2-00a0C9697d07}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{c06ff265-ae09-48f0-812c-16753d7cba83}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{d48179be-ec20-11d1-b6b8-00c04fa372a7}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{6bdd1fc1-810f-11d0-bec7-08002be2092f}</strong></p></td></tr></tbody></table><p></p><p>PCIe:<br><code>Computer
+        Configuration &gt; Administrative Templates &gt; Windows Components &gt;
+        BitLocker Drive Encryption &gt; Disable new DMA devices when this
+        computer is locked</code></p><p>General protection against DMA
+        attacks:</p><p><code>Computer Configuration &gt; Administrative
+        Templates &gt; System &gt; Device Guard &gt; Turn on Virtualization
+        Based Security &gt; Secure Boot with DMA</code></p>
+      references:
+        - >-
+          https://www.synacktiv.com/en/publications/practical-dma-attack-on-windows-10.html
+        - 'https://www.scip.ch/?labs.20211209'
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: LSA Protection Settings
+      vulnType: Pentest
+      description: >-
+        <p>LSA Protection, also known as RunAsPPL (Protected Process Light), is
+        a security feature introduced in Windows 10 and Windows Server 2016. It
+        is designed to protect critical operating system processes by running
+        them with an elevated level of protection.</p><p>LSA (Local Security
+        Authority) is a subsystem in Windows responsible for security-related
+        operations. LSA Protection ensures that certain critical LSA processes
+        are isolated and run in a restricted mode called "Protected Process
+        Light." This mode provides additional security measures to prevent
+        unauthorized access or tampering of these processes.</p><p>Protected
+        Process Light (PPL) restricts the interactions and privileges of a
+        process, making it more resistant to attacks and unauthorized
+        modifications. PPL processes are given a higher integrity level, making
+        it difficult for lower-privileged processes or malware to tamper with
+        them. This helps protect critical system functions and sensitive
+        data.</p><p>By running LSA processes as PPL, Windows enhances the
+        overall security of the operating system and helps mitigate various
+        attack vectors that target system-level processes.</p>
+      observation: <p><br><br></p>
+      remediation: >-
+        <p>Activate LSA Protection by setting the following registry
+        key:<br><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\LSA
+        RunAsPPL= 1</code></p>
+      references:
+        - 'https://itm4n.github.io/lsass-runasppl/'
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Disk Encryption Settings
+      vulnType: Pentest
+      description: >-
+        <p>Disk encryption is a security measure used to protect the data stored
+        on a storage device, such as a hard drive or solid-state drive (SSD). It
+        ensures that the data remains unreadable and inaccessible to
+        unauthorized users even if the device is lost, stolen, or accessed
+        without proper authorization.</p><p>The primary purpose of disk
+        encryption is to encrypt the entire contents of the disk, including the
+        operating system, applications, and user data. It prevents unauthorized
+        individuals from accessing or extracting sensitive information from the
+        disk by encrypting it using a cryptographic algorithm.</p><p>One method
+        to enhance the security of disk encryption is through preboot
+        authentication (PBA). PBA adds an additional layer of protection by
+        requiring users to provide authentication credentials before the
+        operating system boots up. This means that even if someone gains
+        physical access to the device, they cannot bypass the encryption without
+        providing the correct authentication.</p><p>Preboot authentication
+        typically involves a separate login screen or interface that prompts
+        users to enter a password or other authentication factors, such as a PIN
+        or biometric data (e.g., fingerprint or facial recognition). Only upon
+        successful authentication will the device proceed to boot up the
+        operating system and decrypt the disk.</p><p>By combining disk
+        encryption with preboot authentication, the data on the encrypted disk
+        remains secure from unauthorized access. Even if an attacker manages to
+        steal or gain physical access to the device, they would need to bypass
+        the preboot authentication to gain access to the encrypted
+        data.</p><p>It is important to choose strong authentication credentials
+        and regularly update them to maintain the security of the disk
+        encryption. Additionally, ensuring the device's firmware and software
+        are up to date helps protect against known vulnerabilities and ensures
+        the effectiveness of the encryption and authentication mechanisms.</p>
+      remediation: >-
+        <p>If the encryption is meant to protect against sophisticated attacks,
+        the TPM only mode for BitLocker is not sufficient. One of the
+        alternative solutions with an additional PIN or USB device should be
+        taken into consideration[2]. Another idea would be to make use of 3rd
+        party applications that will give the user a SSO feeling that integrate
+        with BitLocker.</p>
+      references:
+        - '[1] https://luemmelsec.github.io/Go-away-BitLocker-you-are-drunk/'
+        - >-
+          [2]
+          https://learn.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-countermeasures
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Removal Media Control Settings
+      vulnType: Pentest
+      description: >-
+        <p>Removable media control is a security feature that helps protect
+        against various threats related to the use of removable storage devices
+        such as USB flash drives, external hard drives, and optical media.
+        Here's a brief description of why removable media control is considered
+        a security feature and the threats it can help
+        mitigate:</p><ol><li><p>Unauthorized data access: Preventing
+        unauthorized access to sensitive data on removable
+        devices.</p></li><li><p>Malware introduction and spread: Reducing the
+        risk of malware infections and the spread of malicious code through
+        removable media.</p></li><li><p>"Bad USB" or "Bad Ethernet" devices that
+        disguise as legitimate USB devices emulating HIDs like a keyboard or a
+        network adapter to execute code or sniff
+        credentials.</p></li><li><p>Data loss prevention: Implementing measures
+        to prevent accidental data loss or unauthorized copying of sensitive
+        information.</p></li><li><p>Unauthorized software or applications:
+        Restricting the introduction of unauthorized software onto corporate
+        devices through removable media.</p></li><li><p>Compliance and
+        regulatory requirements: Enforcing policies to meet industry regulations
+        and demonstrate data security compliance.</p></li></ol><p><a
+        target="_blank" rel="noopener noreferrer nofollow"
+        href="http://compliance.By">By</a> implementing removable media control
+        as a security feature, organizations can mitigate the risks associated
+        with unauthorized data access, malware infections, data loss,
+        unauthorized software execution, and non-compliance with regulations. It
+        provides an additional layer of protection to safeguard sensitive
+        information and maintain the integrity and security of systems and
+        networks.</p>
+      remediation: >-
+        <p>Implement according countermeasures that prevent attacks over
+        removeable media.<br>This can for example be done via
+        GPOs:</p><ol><li><p>Device installation restrictions: Group Policy can
+        be used to restrict the installation of USB devices on computers. It
+        allows administrators to define policies that prevent the installation
+        of unrecognized or unauthorized USB devices, thereby mitigating the risk
+        of "Bad USB" attacks.</p></li><li><p>USB port disabling: Group Policy
+        enables administrators to disable specific USB ports on computers. By
+        selectively disabling USB ports, organizations can limit the risk of
+        unauthorized USB devices being connected and prevent potential "Bad USB"
+        attacks.</p></li><li><p>Windows Defender Application Control: Windows
+        Defender Application Control (WDAC) is a security feature available in
+        Windows 10 Enterprise and Windows Server editions. It uses Group Policy
+        to define policies that allow only trusted applications to run on a
+        system. By enforcing strict application control policies, organizations
+        can reduce the risk of "Bad USB" attacks by blocking the execution of
+        unauthorized or malicious code from USB
+        devices.</p></li></ol><p></p><p><br></p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:L/A:N'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Credential Guard Settings
+      vulnType: Pentest
+      description: >-
+        <p>Credential Guard is a security feature introduced in Windows 10 and
+        Windows Server 2016 that helps protect against credential theft and
+        unauthorized access to sensitive credentials on a Windows system. It is
+        specifically designed to defend against Pass-the-Hash (PtH) and
+        Pass-the-Ticket (PtT) attacks.</p><p>Credential theft attacks typically
+        target the authentication process by stealing or manipulating user
+        credentials, such as usernames and passwords, stored in memory or the
+        Local Security Authority (LSA) process. These attacks allow adversaries
+        to gain unauthorized access to systems, networks, or sensitive
+        resources.</p><p>Credential Guard leverages virtualization-based
+        security to isolate and protect these credentials. It utilizes
+        virtualization technology, such as Hyper-V, to create a separate
+        isolated environment called the "security boundary." Within this
+        security boundary, sensitive credentials are stored and processed,
+        effectively isolating them from the rest of the system, including the
+        operating system and user processes.</p><p>By isolating credentials in a
+        protected environment, Credential Guard helps prevent unauthorized
+        access or tampering by malicious actors. It ensures that even if an
+        attacker gains access to the operating system or compromises the system
+        at a lower level, they cannot access or extract sensitive credentials
+        stored within Credential Guard.</p><p>Key features and benefits of
+        Credential Guard include:</p><ol><li><p>Protection against Pass-the-Hash
+        and Pass-the-Ticket attacks.</p></li><li><p>Isolation of credentials in
+        a separate security boundary.</p></li><li><p>Use of virtualization-based
+        security technology for enhanced
+        protection.</p></li><li><p>Compatibility with existing authentication
+        methods, such as Kerberos and NTLM.</p></li><li><p>Integration with
+        other security technologies, like Windows Hello for Business and Windows
+        Defender Credential Guard.</p></li></ol><p>Overall, Credential Guard
+        strengthens the security posture of Windows systems by safeguarding
+        sensitive credentials and mitigating the risk of credential theft
+        attacks.</p>
+      remediation: >-
+        <p>Follow the steps provided by Microsoft [1] to enabled Credential
+        Guard.</p>
+      references:
+        - >-
+          [1]
+          https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/credential-guard-manage
+        - 'https://blog.nviso.eu/2018/01/09/windows-credential-guard-mimikatz/'
+        - >-
+          https://blog.netwrix.com/2023/02/06/using-windows-defender-credential-guard-to-protect-privileged-credentials/
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 3
+  details:
+    - locale: EN
+      title: Applocker Settings
+      vulnType: Pentest
+      description: >-
+        <p>AppLocker is a security feature introduced in Windows 7 and Windows
+        Server 2008 R2, and it is available in subsequent versions of Windows.
+        It is designed to help organizations enforce application control
+        policies by allowing or blocking the execution of specified applications
+        and scripts.</p><p>AppLocker enables administrators to define rules that
+        determine which applications are allowed to run on a system. These rules
+        can be based on various criteria, including file path, file hash,
+        publisher, or digital signature. By configuring these rules,
+        administrators have granular control over the types of applications that
+        can be executed on managed systems.</p><p>Key features and benefits of
+        AppLocker include:</p><ol><li><p>Application Whitelisting:
+        Administrators can create rules that specify which applications are
+        allowed to run, effectively whitelisting approved applications. This
+        helps prevent unauthorized or malicious software from running on the
+        system.</p></li><li><p>Rule Enforcement: AppLocker enforces the
+        configured rules at the operating system level, ensuring that only
+        approved applications are allowed to execute. It helps protect against
+        unauthorized software installations and execution
+        attempts.</p></li><li><p>Flexible Rule Criteria: Rules can be created
+        based on various criteria, including file attributes, publisher
+        information, digital signatures, and path locations. This flexibility
+        allows organizations to define specific policies tailored to their
+        needs.</p></li><li><p>Centralized Management: AppLocker can be managed
+        through Group Policy, providing a centralized management interface for
+        creating, deploying, and maintaining application control policies across
+        multiple systems.</p></li><li><p>Auditing and Reporting: AppLocker
+        provides auditing capabilities to track and monitor application
+        execution attempts. Detailed logs and reports help administrators
+        identify and investigate unauthorized or blocked application
+        activities.</p></li></ol><p>AppLocker is primarily aimed at
+        organizations that require strict control over the software running on
+        their systems, such as enterprises, government agencies, and regulated
+        industries. It helps enhance security by preventing the execution of
+        unauthorized or potentially malicious applications, reducing the attack
+        surface and mitigating the risk of malware infections and unauthorized
+        software usage.</p>
+      remediation: >-
+        <p>Where applicable use WDAC (see [1]).</p><p>If not feasible, implement
+        Applocker to further harden the system against attacks.</p><p>Follow the
+        guidelines referenced from Microsoft [2].</p>
+      references:
+        - >-
+          [1]
+          https://learn.microsoft.com/de-de/windows/security/threat-protection/windows-defender-application-control/wdac-and-applocker-overview
+        - >-
+          [2]
+          https://learn.microsoft.com/de-de/windows/security/threat-protection/windows-defender-application-control/applocker/applocker-overview
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: DHCPv6 Settings
+      vulnType: Pentest
+      description: >-
+        <p>In DHCPv6, one of the potential attack vectors is related to the
+        DHCPv6 offer process, specifically when configuring DNS servers. Here's
+        an explanation of DHCPv6 attacks related to setting DNS servers via DHCP
+        offers:</p><ol><li><p>Rogue DHCPv6 Server: An attacker can set up a
+        rogue DHCPv6 server on the network to offer malicious DNS server
+        addresses in the DHCPv6 response. When clients request DHCPv6
+        configuration, they may receive a DHCPv6 offer from the rogue server
+        with DNS server addresses that the attacker controls. This can redirect
+        the client's DNS queries to malicious DNS servers under the attacker's
+        control.</p></li><li><p>DNS Spoofing: By providing malicious DNS server
+        addresses in the DHCPv6 offer, an attacker can perform DNS spoofing.
+        When clients use the offered DNS servers to resolve domain names, the
+        attacker's DNS servers respond with false or malicious information. This
+        can lead to users being redirected to malicious websites, phishing
+        attacks, or manipulation of DNS responses to gain unauthorized access to
+        sensitive information.</p></li><li><p>MITM Attacks: DHCPv6 DNS server
+        configuration can also be exploited for Man-in-the-Middle (MitM)
+        attacks. An attacker may intercept the DHCPv6 offer and modify the DNS
+        server addresses to point to their own server. This enables the attacker
+        to intercept DNS queries and responses, allowing them to monitor or
+        manipulate the communication between the client and legitimate DNS
+        servers.</p></li></ol><p>Normally companies have a DHCPv4 server running
+        but not one for DHCPv6. Modern Windows versions ship with IPv6 enabled,
+        which takes precedence over IPv4. Hence out of the box these systems are
+        likely to be vulnerable to the before mentioned attacks.</p>
+      remediation: >-
+        <p>To mitigate the described attacks, the following measures can be
+        implemented:</p><p>Disable IPv6: If IPv6 is not required, it is
+        recommended to disable the IPv6 interface on client systems. This can be
+        done through network adapter settings or registry
+        configurations.</p><p>Prefer IPv4 over IPv6: Network configurations can
+        be adjusted to prioritize IPv4 connectivity over IPv6. This can be done
+        by modifying network interface settings or network routing
+        configurations. In these cases the valid IPv4 configuration for e.g. DNS
+        will "overrule" the rouge IPv6 DNS setting.</p><p>Exercise caution in
+        disabling IPv6 on Servers: Microsoft advises against disabling IPv6 in
+        server environments, as it may cause disruptions to critical
+        functionalities such as Exchange or Domain Controllers. Careful
+        consideration should be given before disabling IPv6 on
+        servers.</p><p>Configure IPS/IDS Rules: Intrusion Prevention Systems
+        (IPS) or Intrusion Detection Systems (IDS) can be configured with
+        additional rules specifically designed to detect and mitigate DHCPv6
+        attacks. These rules should be regularly updated to address emerging
+        threats.</p><p>Use Encrypted Connections: To prevent man-in-the-middle
+        attacks, it is recommended to utilize encrypted connections wherever
+        possible. This includes using secure protocols such as HTTPS for web
+        communications and implementing VPNs (Virtual Private Networks) for
+        secure remote access.</p><p>Specify Static Gateway and DNS Server: If
+        IPv6 is necessary, it is advisable to manually configure and specify the
+        gateway and DNS server addresses statically. This reduces the risk of
+        DNS-related attacks by eliminating the reliance on DHCPv6 for network
+        configuration.</p>
+      references:
+        - >-
+          https://blog.fox-it.com/2018/01/11/mitm6-compromising-ipv4-networks-via-ipv6/
+        - >-
+          https://www.blackhillsinfosec.com/mitm6-strikes-again-the-dark-side-of-ipv6/
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N'
+  priority: 1
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: BIOS Hardening
+      vulnType: Pentest
+      description: >-
+        <p>The Basic Input/Output System (BIOS) is a firmware that is embedded
+        in a computer's motherboard. It is responsible for initializing hardware
+        components during the boot process and providing a basic set of
+        instructions for the operating system to interact with the
+        hardware.</p><p>Securing the BIOS with a password is important for
+        several reasons:</p><ol><li><p>Unauthorized access prevention: Setting a
+        BIOS password adds an extra layer of security to your computer system.
+        It prevents unauthorized users from accessing and modifying critical
+        BIOS settings, such as boot order, hardware configurations, and security
+        features.</p></li><li><p>Protection against unauthorized booting: A BIOS
+        password helps protect against unauthorized booting of the system from
+        external devices, such as USB drives or optical media. It ensures that
+        only authorized individuals can boot the system, reducing the risk of
+        unauthorized access or malware infections.</p></li><li><p>Data
+        protection: By securing the BIOS, you can help protect sensitive data
+        stored on your computer. If someone tries to tamper with the BIOS
+        settings or remove the hard drive, they will be unable to access the
+        data without the BIOS password.</p></li><li><p>Preventing malicious
+        firmware modifications: Securing the BIOS helps prevent unauthorized
+        modifications to the firmware itself. Malicious actors could potentially
+        modify the BIOS to install persistent malware or compromise the system's
+        integrity. A BIOS password reduces the risk of such
+        tampering.</p></li><li><p>Compliance and regulatory requirements: In
+        certain industries or organizations, securing the BIOS with a password
+        may be necessary to comply with industry regulations or internal
+        security policies. It demonstrates a proactive approach to securing
+        computer systems and protecting sensitive
+        information.</p></li></ol><p>It's important to note that while a BIOS
+        password provides a level of security, it is not foolproof. Advanced
+        attackers may still find ways to bypass or reset the BIOS password.
+        However, setting a BIOS password is a recommended security practice that
+        can help mitigate the risk of unauthorized access and protect system
+        integrity.</p>
+      remediation: <p>A strong and unique password for each system should be used.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:L/I:H/A:N'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: EN
+      title: Writeable SYSTEM Path Folders
+      vulnType: Pentest
+      description: >-
+        <p>Granting low-privileged users write rights over folders that are in
+        the SYSTEM Path variable can pose security risks due to the following
+        reasons:</p><ul><li><p>Malicious code execution: If low-privileged users
+        can write to the folders in the SYSTEM Path variable, they could
+        potentially place malicious executables or scripts in those folders.
+        This could allow them to execute arbitrary code with elevated
+        privileges, bypassing security controls.</p></li><li><p>DLL hijacking:
+        By placing a malicious DLL (Dynamic Link Library) with the same name as
+        a legitimate DLL used by an application in one of the writable folders,
+        low-privileged users can trick the application into loading the
+        malicious DLL. This can lead to arbitrary code execution or privilege
+        escalation.</p></li><li><p>Path hijacking: If low-privileged users can
+        modify the SYSTEM Path variable, they can manipulate the order of folder
+        paths. This can result in unintended application behavior, as an
+        attacker can substitute a legitimate executable or script with a
+        malicious one in a folder they have write access
+        to.</p></li><li><p>Privilege escalation: Exploiting write access to
+        folders in the SYSTEM Path variable can be used as a stepping stone for
+        privilege escalation. By placing a malicious executable in a writable
+        folder, an attacker can trick a higher-privileged user or system process
+        to execute it, potentially gaining elevated privileges.</p></li></ul>
+      remediation: >-
+        <p>To mitigate these risks, it is recommended to restrict write access
+        to folders in the SYSTEM Path variable to only trusted administrators or
+        authorized users. Regular users should not have write permissions on
+        these folders to prevent unauthorized modifications and potential
+        security breaches.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:H/A:N'
+  details:
+    - locale: EN
+      title: WDAC Settings
+      vulnType: Pentest
+      description: >-
+        <p>Windows Defender Application Control (WDAC) is a security feature in
+        Windows 10 that helps protect systems against malware and unauthorized
+        software execution, and is the successor to Applocker. WDAC utilizes
+        code integrity policies to enforce strict control over which
+        applications and code can run on a device.</p><p>WDAC operates by
+        establishing a trusted set of rules that define which applications are
+        allowed to execute based on factors such as digital signatures, file
+        hashes, and other criteria. These rules create a whitelist of trusted
+        applications and prevent the execution of unauthorized or malicious
+        code.</p><p>With WDAC, organizations can define and enforce policies
+        that specify which software is allowed to run, reducing the risk of
+        malware infection and unauthorized software installations. It adds an
+        additional layer of protection by verifying the integrity and
+        authenticity of applications before they are executed.</p><p>WDAC
+        leverages virtualization-based security technologies, such as Virtual
+        Secure Mode (VSM) and hardware-based security features, to provide a
+        highly secure execution environment. It helps protect against
+        kernel-level exploits, code injection attacks, and other advanced
+        malware techniques.</p><p>By implementing WDAC, organizations can
+        strengthen their security posture, reduce the attack surface, and ensure
+        that only trusted and authorized applications can run on their Windows
+        10 devices.</p>
+      remediation: >-
+        <p>Enabling Windows Defender Application Control (WDAC) involves several
+        steps and requires specific configurations. Here's a general outline of
+        the process:</p><ul><li><p>Verify System Requirements: Ensure that your
+        system meets the hardware and software requirements for WDAC. This
+        includes having a compatible version of Windows 10 Enterprise or Windows
+        Server, a compatible processor with virtualization extensions, and
+        Secure Boot enabled.</p></li><li><p>Create Code Integrity Policies: WDAC
+        relies on code integrity policies to define the rules for application
+        and code execution. You need to create and configure these policies
+        based on your organization's requirements. This involves specifying
+        trusted sources, file hashes, and other criteria that determine which
+        applications are allowed to run.</p></li><li><p>Deploy WDAC Policies:
+        Once the code integrity policies are defined, you need to deploy them to
+        the target devices. This can be done using Group Policy, Configuration
+        Manager, or other deployment tools. Ensure that the policies are
+        distributed and applied correctly to the intended
+        devices.</p></li><li><p>Test and Validate Policies: It's crucial to
+        thoroughly test and validate the WDAC policies to ensure that they
+        function as intended. This includes verifying that only trusted
+        applications can run while unauthorized or malicious code is blocked.
+        Conduct thorough testing to identify any potential conflicts or
+        issues.</p></li><li><p>Monitor and Maintain WDAC: After enabling WDAC,
+        it's essential to monitor and maintain the policies regularly. Monitor
+        system logs and events to identify any policy violations or potential
+        threats. Update and maintain the code integrity policies as needed to
+        adapt to changes in your environment.</p></li></ul><p>It's important to
+        note that the specific steps and configurations for enabling WDAC may
+        vary depending on factors such as your organization's security
+        requirements, network infrastructure, and device configuration. It's
+        recommended to consult Microsoft's official documentation or seek
+        guidance from a qualified IT professional for detailed instructions and
+        best practices tailored to your specific environment.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Access to System Tools and Settings
+      vulnType: Pentest
+      description: >-
+        <p>System tools on a Windows system refer to built-in utilities and
+        applications that provide various functionalities for managing and
+        configuring the operating system. These tools are typically designed to
+        perform critical system tasks, diagnostics, troubleshooting, system
+        configuration, and administration. Some common examples of system tools
+        in Windows include Command Prompt (cmd.exe), PowerShell, Task Manager,
+        Registry Editor, Event Viewer, Device Manager, and Disk Management,
+        among others. Changing settings for things like the system proxy,
+        firewall rules and states, network configuration and even installing or
+        uninstalling software is referred to as system settings.</p><p>While
+        system tools and settings are essential for system administrators and
+        power users to effectively manage and maintain the system, granting
+        access to these tools to normal users can pose security concerns. Here
+        are a few reasons:</p><ul><li><p>Unauthorized System Modifications:
+        System tools often have the capability to modify system settings,
+        configurations, and critical files. If normal users have access to these
+        tools, they may unintentionally or maliciously modify system settings,
+        leading to system instability, performance issues, or security
+        vulnerabilities.</p></li><li><p>Privilege Escalation: Certain system
+        tools can be leveraged to escalate privileges or execute commands with
+        elevated permissions. If normal users have access to such tools, they
+        may attempt to exploit them to gain unauthorized access or perform
+        actions that they should not have privileges
+        for.</p></li><li><p>Exposure of Sensitive Information: System tools can
+        provide access to sensitive system information, logs, or files that may
+        contain confidential data. Allowing normal users to access these tools
+        may expose sensitive information or compromise data
+        privacy.</p></li><li><p>Malware Execution: Malware often attempts to
+        leverage system tools to carry out its malicious activities. Granting
+        access to these tools to normal users increases the risk of
+        inadvertently executing malware or running malicious
+        commands.</p></li></ul><p>To mitigate these security concerns, it is
+        generally recommended to restrict access to system tools and settings
+        and limit their usage to trusted administrators or privileged accounts.
+        User access control, proper permission settings, and implementing the
+        principle of least privilege can help minimize the risk associated with
+        normal users accessing system tools.</p>
+      remediation: >-
+        <p>Restrict access to tools that are meant mainly for administrative
+        purposes as much as possible.<br>This can be done via GPOs or
+        Intune.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: NetBIOS Name Resolution / LLMNR Settings
+      vulnType: Pentest
+      description: >-
+        <p>NetBIOS Name Resolution and Link-Local Multicast Name Resolution
+        (LLMNR) are protocols used for name resolution in Windows networks. They
+        allow devices on a local network to discover and communicate with each
+        other by resolving computer names to IP addresses.</p><p>NetBIOS Name
+        Resolution: NetBIOS (Network Basic Input/Output System) is a legacy
+        protocol used for communication between devices on a local network.
+        NetBIOS Name Resolution translates NetBIOS names (computer names) to IP
+        addresses. It relies on broadcast messages to resolve names, which can
+        be inefficient and pose security risks.</p><p>LLMNR: LLMNR is a modern
+        replacement for NetBIOS Name Resolution introduced in Windows Vista and
+        later versions. It performs a similar function as NetBIOS Name
+        Resolution but uses multicast messages instead of broadcasts. LLMNR is
+        intended to resolve names on local networks when DNS name resolution
+        fails.</p><p>Security Concerns: Both NetBIOS Name Resolution and LLMNR
+        can introduce security risks, particularly when they are enabled on
+        systems connected to untrusted networks or outside the local
+        network.</p><ul><li><p>Man-in-the-Middle (MitM) Attacks: When NetBIOS
+        Name Resolution or LLMNR is enabled, an attacker can intercept and
+        respond to name resolution queries, posing as the intended device. This
+        allows them to redirect network traffic to their own system, enabling
+        potential eavesdropping, data interception, or modification of network
+        communications.</p></li><li><p>Name Spoofing and Identity Theft: By
+        responding to name resolution queries, an attacker can potentially spoof
+        the identity of legitimate devices on the network. This can lead to
+        confusion, unauthorized access, or identity
+        theft.</p></li><li><p>Information Disclosure: Name resolution requests
+        can leak sensitive information, such as computer names and domain
+        information, which can be exploited by an attacker for reconnaissance or
+        targeted attacks.</p></li></ul><p>To mitigate these security concerns,
+        it is generally recommended to disable NetBIOS Name Resolution and
+        LLMNR, especially on systems connected to untrusted networks or when not
+        required for local network functionality. Instead, relying on more
+        secure name resolution mechanisms like DNS (Domain Name System) is
+        recommended. Disabling these protocols can help reduce the attack
+        surface and protect against potential MitM attacks and other security
+        vulnerabilities.</p>
+      remediation: >-
+        <p>NetBIOS should be disabled on all systems that don't need to be
+        compatible with Windows 2000 or older OS. It can be disabled via DHCP or
+        GPO.<br></p><img class="custom-image" src="64998d53b1221cb2c209eb7d"
+        alt="NetBIOS settings in registry"><p></p><p>You can change all adapters
+        to 2 like so:</p><p><code>$regkey =
+        "HKLM:SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces"</code></p><p><code>Get-ChildItem
+        $regkey |foreach { Set-ItemProperty -Path "$regkey\$($_.pschildname)"
+        -Name NetbiosOptions -Value 2 -Verbose}</code></p><p>The same applies to
+        LLMNR. However, it can only be disabled via GPO or a script.</p><img
+        class="custom-image" src="64998dceb1221cb2c209eb83" alt="GPO settings to
+        disable LLMNR"><p><code>Computer Configuration -&gt; Administrative
+        Templates -&gt; Network -&gt; DNS Client -&gt; Turn off multicast name
+        resolution</code></p>
+      references:
+        - 'https://luemmelsec.github.io/Relaying-101/'
+        - >-
+          https://woshub.com/how-to-disable-netbios-over-tcpip-and-llmnr-using-gpo/
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  details:
+    - locale: EN
+      title: SMB Server Settings
+      vulnType: Pentest
+      description: >-
+        <p>SMB (Server Message Block) is a network protocol used for file and
+        printer sharing between computers. There are different versions of the
+        SMB protocol, including SMB1 (also known as CIFS - Common Internet File
+        System), SMB2, SMB2.1, SMB3, and SMB3.02.</p><p>SMB signing is a
+        security feature that helps protect against tampering and unauthorized
+        access of SMB traffic. When signing is enabled, the SMB server and
+        client sign the SMB packets, providing a way to verify the integrity and
+        authenticity of the data exchanged between them.</p><p>Here's an
+        overview of SMB protocol versions and their support for
+        signing:</p><ol><li><p>SMB1 (CIFS): SMB1 supports SMB message signing.
+        It provides a basic level of security, but it is considered outdated and
+        less secure compared to newer versions.</p></li><li><p>SMB2 and newer:
+        Starting from SMB2, the protocol introduced significant improvements in
+        terms of performance and security. SMB2 supports stronger encryption
+        algorithms and the ability to negotiate signing as a security
+        feature.</p></li></ol><ul><li><p>SMB2.1: This version adds support for
+        larger buffer sizes and better performance.</p></li><li><p>SMB3: SMB3
+        further enhances security and performance. It introduces features like
+        encryption and transparent failover for continuous
+        availability.</p></li><li><p>SMB3.02: This version adds improvements for
+        SMB Direct, which enables high-speed data transfers using RDMA (Remote
+        Direct Memory Access).</p></li></ul><p>Not having SMB signing enabled
+        can pose security risks, especially in the context of relay attacks. A
+        relay attack involves an attacker intercepting and forwarding SMB
+        traffic between a client and a server, potentially tampering with or
+        impersonating the communication.</p><p>When SMB signing is disabled, an
+        attacker can modify SMB packets in transit without detection,
+        potentially injecting malicious code or manipulating data. By enabling
+        SMB signing, the server and client can verify the integrity and
+        authenticity of the SMB traffic, reducing the risk of unauthorized
+        modification or tampering.</p><p>Enabling SMB signing helps protect
+        against attacks like Man-in-the-Middle (MitM) attacks, where an attacker
+        intercepts SMB traffic and manipulates it to gain unauthorized access or
+        extract sensitive information. By ensuring that SMB packets are signed,
+        the receiving party can verify the origin and integrity of the data,
+        making it harder for an attacker to tamper with the
+        communication.</p><p>It is recommended to enable SMB signing for
+        improved security, particularly in environments where sensitive data is
+        being transmitted over SMB connections.</p>
+      remediation: >-
+        <p>Activate SMB Signing wherever possible.</p><p>This can be done e.g.
+        via GPO:</p><p><code>Computer Configuration -&gt; Policies -&gt; Windows
+        Settings -&gt; Security Settings -&gt; Local Policies -&gt; Security
+        Options -&gt; "Microsoft network server: Digitally sign communications
+        (always)"</code></p><p>It's important to test the changes in a
+        controlled environment and verify that SMB signing is working as
+        expected before applying the GPO to production systems.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Windows Firewall Settings
+      vulnType: Pentest
+      description: >-
+        <p>The Windows Firewall is a built-in security feature in Windows
+        operating systems that helps protect your computer from unauthorized
+        network access. It acts as a barrier between your computer and external
+        networks, controlling incoming and outgoing network traffic based on
+        predefined rules.</p><p>Here are some reasons why the Windows Firewall
+        should be turned on:</p><ul><li><p>Network Security: The primary purpose
+        of the firewall is to safeguard your computer from malicious network
+        activity, such as unauthorized access, hacking attempts, malware, and
+        network-based attacks.</p></li><li><p>Blocking Unauthorized Connections:
+        The firewall blocks incoming connections that are not explicitly allowed
+        by the configured rules. This prevents unauthorized access to your
+        computer and helps protect your personal and sensitive
+        information.</p></li><li><p>Outbound Traffic Control: The firewall also
+        monitors and controls outgoing network traffic. It prevents potentially
+        harmful programs or malware from connecting to the internet without your
+        knowledge, reducing the risk of data leakage and preventing unauthorized
+        communications.</p></li><li><p>Default Protection: Windows Firewall is
+        enabled by default on most Windows installations. Keeping it enabled
+        ensures that you have a baseline level of protection even if you don't
+        have any additional third-party security solutions
+        installed.</p></li></ul>
+      observation: >-
+        <p>Scoring hardly depends on what you found.<br>Disabled Firewall =
+        High<br>Enabled Firewall with any-any is the same ^^<br>Enabled firewall
+        with bigger security holes might be medium ...</p>
+      remediation: >-
+        <p>To ensure the effective use of the Windows Firewall, it's important
+        to follow these best practices:</p><ul><li><p>Enable the Firewall:
+        Always ensure that the Windows Firewall is enabled on your computer to
+        provide the first line of defense against unauthorized network
+        access.</p></li><li><p>Use Default Firewall Profiles: Windows Firewall
+        provides separate profiles for different network locations (Domain,
+        Private, Public). Configure the appropriate profile for each network
+        connection to apply the necessary rules based on the network's trust
+        level.</p></li><li><p>Allow Only Necessary Ports: By default, the
+        Windows Firewall blocks all incoming connections. If you need to allow
+        specific network services or applications, create custom rules to open
+        only the necessary ports in both inbound and outbound directions. This
+        reduces the attack surface and minimizes the risk of unwanted
+        access.</p></li><li><p>Regularly Update Firewall Rules: Periodically
+        review and update your firewall rules to ensure they reflect your
+        current network requirements. Remove any unnecessary or obsolete rules
+        to maintain an efficient and secure
+        configuration.</p></li></ul><p>Overall, enabling and properly
+        configuring the Windows Firewall is an essential step in securing your
+        computer and protecting it from unauthorized network access and
+        potential threats.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/best-practices-configuring
+      customFields: []
+  category: System Security
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Antivirus Settings
+      vulnType: Pentest
+      description: >-
+        <p>Antivirus (AV) software, also known as antivirus or anti-malware
+        software, is designed to protect computers and other devices from
+        malicious software, such as viruses, worms, Trojans, spyware, adware,
+        and other types of malware. Its primary purpose is to detect, prevent,
+        and remove malicious programs that can harm your computer system or
+        compromise your data.</p><p>Here are some key reasons why it is
+        important to have AV software turned on:</p><ul><li><p>Malware
+        Protection: AV software scans files, programs, and websites for known
+        malware signatures and behavioral patterns, preventing them from
+        infecting your system. It helps safeguard your computer against viruses,
+        which can cause data loss, system crashes, or unauthorized
+        access.</p></li><li><p>Real-Time Protection: AV software provides
+        real-time monitoring of files and activities on your computer, detecting
+        and blocking malware threats as they occur. This proactive approach
+        helps prevent malware from executing and spreading throughout your
+        system.</p></li><li><p>Web Protection: Many AV solutions include web
+        protection features that help block access to malicious websites or warn
+        you about potentially dangerous sites. This protects you from phishing
+        attempts, drive-by downloads, and other web-based
+        threats.</p></li><li><p>Email Protection: AV software often integrates
+        with email clients to scan incoming and outgoing email attachments for
+        malware. It helps prevent the spread of infected files through email and
+        reduces the risk of falling victim to email-borne threats, such as
+        phishing emails or malicious attachments.</p></li><li><p>Vulnerability
+        Detection: Some AV software includes vulnerability scanning features
+        that identify security weaknesses in your operating system or installed
+        applications. By identifying vulnerabilities, you can take necessary
+        steps to patch or update software, minimizing the risk of exploitation
+        by malware.</p></li><li><p>Data Protection: AV software helps protect
+        your personal and sensitive information by preventing unauthorized
+        access or theft. It can detect keyloggers, screen capture tools, and
+        other types of spyware that aim to collect your private
+        data.</p></li><li><p>System Performance: While AV software performs
+        resource-intensive tasks like scanning files and monitoring activities,
+        modern solutions are designed to minimize impact on system performance.
+        They use optimized scanning algorithms and leverage hardware
+        acceleration to ensure efficient protection without significantly
+        slowing down your computer.</p></li></ul><p>In summary, having AV
+        software turned on is crucial for maintaining a secure and safe
+        computing environment. It helps protect your system, data, and privacy
+        from various malware threats, ensuring a smoother and more secure
+        digital experience.</p>
+      observation: >-
+        <p>Rating hardly depends on what is setup.<br>Is AV on or not?<br>Many
+        exclusions that can be reviewed by anyone? Are they lax?<br>All features
+        enabled or are crucial ones missing?</p>
+      remediation: >-
+        <p>An AV solution should be installed and actively running on each
+        system.<br>The product itself as well as its patterns should be kept
+        up-to-date at any time.<br>Harden the systems as much as possible by
+        making use of all features provided by your AV.<br>Ensure that things
+        like tamper protection are enabled and can't be disabled by normal users
+        - best also not by administrators.<br>Exclusions should be kept to a
+        minimum, where possible individually by system. So you should not
+        globally exclude path x or application y, just because you need it on
+        one system out of hundreds.<br></p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: EN
+      title: Proxy Settings
+      vulnType: Pentest
+      description: >-
+        <p>A proxy server acts as an intermediary between a client (such as a
+        computer or device) and the internet. When a client requests a resource
+        from the internet, the request first goes through the proxy server,
+        which then forwards the request on behalf of the client. The proxy
+        server can provide various functions, including caching, filtering, and
+        anonymizing the client's requests.</p><p>The primary reasons for using a
+        proxy server are:</p><ul><li><p>Anonymity and Privacy: By using a proxy
+        server, the client's IP address and other identifying information can be
+        masked. This helps protect the client's privacy and adds a layer of
+        anonymity when accessing websites or online
+        services.</p></li><li><p>Caching and Performance: Proxy servers can
+        store copies of frequently accessed web resources, allowing subsequent
+        requests for the same resource to be fulfilled from the cache. This
+        reduces bandwidth usage and improves performance by delivering content
+        faster to the client.</p></li><li><p>Content Filtering and Access
+        Control: Proxy servers can be configured to filter web content based on
+        predefined rules. This allows organizations to enforce access policies,
+        block malicious websites, or restrict access to certain categories of
+        content, enhancing security and productivity.</p></li></ul><p>Now,
+        regarding security issues, not using a proxy server when required or
+        recommended can pose several risks:</p><ul><li><p>Data Leaks: Without a
+        proxy server, client requests are made directly to the destination
+        server, potentially revealing the client's IP address and other
+        identifying information. This information can be used for tracking,
+        targeting, or profiling the client.</p></li><li><p>Bypassing Security
+        Controls: Proxy servers can implement security controls such as
+        antivirus scanning, intrusion detection, or content filtering. Not using
+        a proxy may bypass these controls, increasing the risk of accessing
+        malicious or inappropriate content.</p></li><li><p>Exposure to Malicious
+        Content: Proxy servers can provide an additional layer of defense by
+        scanning and filtering web content for malware or malicious scripts.
+        Without a proxy, clients may be more exposed to such
+        threats.</p></li><li><p>Limited Access Management: Proxy servers allow
+        organizations to enforce access policies, blocking access to
+        unauthorized websites or limiting access to specific resources. Not
+        using a proxy can make it challenging to manage and control internet
+        access, leading to potential security and compliance
+        issues.</p></li></ul><p>In summary, using a proxy server offers benefits
+        such as privacy, performance, and security controls. Neglecting to use a
+        proxy, when necessary or advised, can compromise privacy, expose clients
+        to security risks, and make it challenging to enforce access policies
+        and protect against malicious content.</p>
+      observation: >-
+        <p>Rating depends on what you found.<br>No proxy - bad<br>Proxy but it
+        doesn't filter - bad<br>Try to download Malware via HTTP, HTTPS, in a
+        ZIP file, in an encrypted ZIP file etc.</p>
+      remediation: >-
+        <p>Use a proxy, either locally or in a central place.<br>Make sure to
+        block malicious web traffic.<br>Inspect secured traffic for malware -
+        SSL inspection.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: EN
+      title: Software Lifecycle Management
+      vulnType: Pentest
+      description: >-
+        <p>Used soft- and firmware as well as operating systems should always be
+        kept to the most current versions.</p><p>Using outdated versions poses
+        several direct and indirect security risks like:<br>- Security
+        vulnerabilities: outdated software may have unpatched security holes
+        that can be exploited by attackers.<br>- Compatibility issues: new
+        hardware or software may not be compatible with old systems.<br>-
+        Performance degradation: outdated software may run slower, become less
+        responsive, or crash more often.<br>- Lack of features: newer software
+        may have additional features or improvements that are not available in
+        older versions.<br>- Compliance problems: outdated software may not meet
+        industry regulations or standards.<br><br>So staying up to date is a
+        mandatory requirement to a matured security culture and should be part
+        of the patch management process.</p>
+      observation: >-
+        <p>Criticality depending on what could be achieved due to systems and
+        software being outdated.</p>
+      remediation: >-
+        <p>Check if any of the mentioned software components can be upgraded /
+        updated and if important security updates are missing.<br>Implement a
+        patch management strategy and process that ensures that all your systems
+        are up to date and that updates are applied timely according to their
+        criticality.<br>Apply workarounds when no patches are available when
+        tackling critical flaws.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: RDP Settings
+      vulnType: Pentest
+      description: >-
+        <p><br>Remote Desktop Protocol (RDP) is a technology developed by
+        Microsoft that allows users to connect to and control a remote computer
+        over a network connection. It enables remote access to resources,
+        applications, and desktop environments on a remote system.</p><p>RDP can
+        be convenient for various purposes, such as remote administration,
+        technical support, and remote work scenarios. However, if not properly
+        secured, RDP can pose security risks. Some of the potential risks
+        include:</p><ul><li><p>Unauthorized access: If RDP is exposed to the
+        internet or not adequately protected, it can become a target for
+        malicious actors attempting to gain unauthorized access to
+        systems.</p></li><li><p>Brute-force attacks: Attackers can launch
+        brute-force attacks against RDP sessions, trying various username and
+        password combinations to gain access.</p></li><li><p>Vulnerabilities:
+        Like any software, RDP implementations can have security vulnerabilities
+        that can be exploited by attackers.</p></li></ul><p>Network Level
+        Authentication (NLA) is a security feature in RDP that can help mitigate
+        some of these risks. NLA requires users to authenticate themselves
+        before establishing a remote desktop connection. It adds an extra layer
+        of security by verifying the user's credentials before allowing access
+        to the remote system. With NLA enabled, the remote system must
+        authenticate the user before a full RDP session is initiated, reducing
+        the risk of unauthorized access.</p><p>By enabling NLA, potential
+        security risks associated with RDP can be mitigated, as it helps ensure
+        that only authenticated and authorized users can establish remote
+        desktop connections. It is recommended to configure RDP with NLA and
+        follow best practices for securing RDP connections, such as using strong
+        passwords, enabling network firewalls, keeping the RDP software up to
+        date, and restricting access to trusted networks or specific IP
+        addresses.</p>
+      remediation: >-
+        <p>If possible disable RDP completely.<br>If not possible, harden access
+        by enforcing NLA. This can be done via GPO or directly via
+        registry:<br><code>Computer Configuration -&gt; Administrative Templates
+        -&gt; Windows Components -&gt; Remote Desktop Services -&gt; Remote
+        Desktop Session Host -&gt; Security -&gt; Require user authentication
+        for remote connections by using Network Level
+        Authentication</code></p><p><code>Set-ItemProperty -Path
+        'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal
+        Server\WinStations\RDP-Tcp' -Name 'UserAuthentication' -Value
+        1</code><br></p><p>Ensure strong passwords or even better MFA for
+        accounts that can login remotely.</p>
+      references: []
+      customFields: []
+  category: System Security
+- cvssv3: null
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: WinRM Settings
+      vulnType: Pentest
+      description: >-
+        <p>WinRM (Windows Remote Management) is a Microsoft Windows feature that
+        allows for remote management and execution of commands on Windows
+        systems over a network. It enables administrators to remotely manage
+        Windows computers using PowerShell or other remote management
+        tools.</p><p>WinRM relies on a client-server model, where the client
+        (usually a remote administrator) communicates with the WinRM service
+        running on the target system to perform management tasks. This allows
+        administrators to remotely configure settings, execute commands,
+        retrieve information, and perform other administrative tasks without
+        physically accessing the system.</p><p>In terms of security
+        implications, WinRM introduces potential risks if not properly
+        configured and secured. Some key considerations
+        include:</p><ul><li><p>Authentication and Authorization: WinRM should be
+        configured to use strong authentication mechanisms, such as Kerberos or
+        SSL/TLS, to prevent unauthorized access. Access controls should be
+        defined to limit who can connect and what actions they can
+        perform.</p></li><li><p>Encryption: Communication between the WinRM
+        client and server should be encrypted using SSL/TLS to protect sensitive
+        data and prevent eavesdropping or tampering.</p></li><li><p>Firewall
+        Configuration: The necessary firewall rules should be in place to allow
+        WinRM traffic only from trusted sources and block unauthorized access
+        from the network.</p></li><li><p>Credential Management: Proper
+        management of credentials used for WinRM authentication is essential.
+        Secure storage and handling of credentials are crucial to prevent
+        unauthorized access to sensitive information.</p></li><li><p>Regular
+        Updates: Keeping the WinRM service and underlying operating system up to
+        date with the latest security patches is important to address any
+        vulnerabilities that may be discovered over time.</p></li></ul><p>By
+        considering and implementing these security measures, WinRM can be used
+        effectively while minimizing the potential risks associated with remote
+        management capabilities.</p>
+      remediation: >-
+        <p>Follow the guidelines outlined in the description to harden
+        WinRM.<br>If possible disable WinRM completely.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/winrmsecurity?view=powershell-7.3
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N'
+  priority: 4
+  remediationComplexity: 1
+  details:
+    - locale: EN
+      title: Unquoted Service Paths
+      vulnType: Pentest
+      description: >-
+        <p>Windows services normally start executables. The executable path
+        allows the OS to find the correct executable to run for each service.
+        The following path is an example of a secure service
+        path:</p><p><code>"C:\Programs\Test
+        Folder\bin\service.exe"</code></p><p>The following path is an example of
+        an unsafe service path:</p><p><code>C:\Program Files\Test
+        Folder\bin\service.exe</code></p><p>When Windows attempts to read the
+        path to this executable, it interprets the space as a kind of terminator
+        if the path is not enclosed in <code>"</code>.&nbsp; So it will attempt
+        to execute the following (in
+        order):</p><p><code>C:\Program.exe</code></p><p><code>C:\Program
+        Files\Test.exe</code></p><p><code>C:\Program Files\Test
+        Folder\bin\service.exe</code></p><p>If the directories are configured
+        with inappropriate permissions, the attacker can place a malicious
+        executable file in them. If the service is set to run with
+        administrative privileges (e.g. SYSTEM), the attacker can elevate its
+        privileges and gain unauthorized administrative access to the system. In
+        this case the attacker would want to try to add the first 2 files to the
+        filesystem.</p>
+      remediation: >-
+        <p>The first step would be to ask the vendor of the affected application
+        for an updated versions that fixes the misconfiguration.</p><p>A manual
+        workaround would be to manually put the binary path into quotes.</p>
+      references:
+        - >-
+          https://www.ired.team/offensive-security/privilege-escalation/unquoted-service-paths
+      customFields: []
+  category: System Security
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Durcissement de PowerShell
+      vulnType: Test de pénétration
+      description: >-
+        <p>PowerShell est un cadre d'automatisation des tâches et de gestion de
+        configuration développé par Microsoft, comprenant une interface en ligne
+        de commande et un langage de script associé basé sur le .NET framework.
+        Il a été conçu pour offrir un moyen plus efficace et efficace pour les
+        administrateurs Windows de gérer et automatiser diverses tâches
+        d'administration système, y compris la gestion du système d'exploitation
+        Windows et d'autres produits Microsoft tels qu'Exchange, SharePoint, et
+        SQL Server.<br><br>PowerShell est souvent utilisé par les attaquants car
+        il leur offre un outil polyvalent intégré pour exécuter des scripts et
+        des commandes malveillants, contourner les contrôles de sécurité,
+        accéder à des informations sensibles et masquer leurs actions. C'est
+        pour cette raison qu'il est considéré comme un outil attrayant pour les
+        acteurs malveillants.<br><br>Il existe plusieurs étapes qui peuvent être
+        prises pour renforcer la manière dont PowerShell peut agir sur un
+        système ou dans un contexte utilisateur
+        spécifique:<br></p><ul><li><p>Restreindre le Mode de Langage</p><p>Le
+        mode de langage PowerShell détermine la syntaxe, les éléments de
+        langage, et le comportement des scripts PowerShell. Les deux principaux
+        modes sont "Complet" et "Restreint". Ils peuvent être utilisés pour
+        limiter les capacités des scripts PowerShell pour des raisons de
+        sécurité et administratives.</p></li><li><p>Définir une Politique
+        d'Exécution</p><p>La politique d'exécution de PowerShell est une
+        fonction de sécurité qui détermine quels types de scripts PowerShell
+        peuvent s'exécuter sur un système. Elle est utilisée pour aider à
+        protéger contre les scripts malveillants en restreignant l'exécution de
+        scripts provenant de sources inconnues ou non
+        fiables.</p></li><li><p>Désinstaller les anciennes versions de
+        PowerShell</p><p>PowerShell version 5 et supérieures disposent
+        d'importantes fonctionnalités de sécurité intégrées qui le rendent plus
+        sûr à utiliser dans les environnements d'entreprise. Par exemple,
+        PowerShell v5 enregistre chaque script exécuté, ce qui facilite la
+        traçabilité de l'exécution de malwares. Ces fonctionnalités de sécurité
+        ne sont pas présentes dans PowerShell v2.0, le rendant moins sécurisé,
+        ce qui en fait en même temps une alternative lucrative pour les
+        attaquants.</p></li></ul><p></p>
+      observation: >-
+        <p>Échec du Mode de Langage = Moyen<br>Politique d'Exécution =
+        Faible<br>PowerShell v2 = Élevé</p>
+      remediation: >-
+        <p>Définissez le Mode de Langage sur <em>Restreint</em>. Cela peut être
+        activé localement:</p><pre><code>[Environment]::SetEnvironmentVariable('
+        __PSLockdownPolicy', '4', 'Machine')</code></pre><p>Ou via les Objets de
+        Stratégie de Groupe :</p><p><em>Configuration
+        ordinateur\Préférences\Paramètres Windows\Environnement</em><br></p><img
+        class="custom-image" src="63e504b947c5530011586cfc" alt="Configuration
+        du mode de langage de PowerShell via GPO"><p></p><p>Définissez la
+        Politique d'Exécution sur <em>Tous Signés</em>. Ceci peut être fait via
+        GPO ici: <em>Configuration ordinateur &gt; Stratégies &gt; Modèles
+        administratifs &gt; Composants Windows &gt; Windows
+        PowerShell</em><br></p><img class="custom-image"
+        src="63e505c447c5530011586cfd" alt="Configuration de la politique
+        d'exécution de PowerShell via GPO"><p><br><br>Désactivez PowerShell v2.0
+        via GPO ou retirez-le localement via les "Fonctionnalités Windows".</p>
+      references:
+        - 'https://adsecurity.org/?p=2604'
+        - >-
+          https://learn.microsoft.com/fr-fr/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.3
+        - >-
+          https://learn.microsoft.com/fr-fr/powershell/scripting/learn/security-features?view=powershell-7.3
+      customFields: []
+  category: Sécurité Système
+- cvssv3: 'CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Attaques DMA
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les attaques DMA (Direct Memory Access) sont une classe de menaces de
+        sécurité qui exploitent la fonctionnalité DMA présente dans de nombreux
+        systèmes informatiques. Le DMA permet à des périphériques matériels,
+        tels que des cartes réseau ou des contrôleurs USB, d'accéder directement
+        à la mémoire du système sans passer par le CPU, permettant des
+        transferts de données plus rapides.</p><p>Dans une attaque DMA, un
+        attaquant obtient un accès physique ou à distance à un système cible et
+        utilise les capacités DMA pour lire ou écrire directement dans la
+        mémoire du système. Cet accès permet à l'attaquant de contourner les
+        mesures de sécurité traditionnelles, telles que les permissions du
+        système d'exploitation ou le cryptage, et de potentiellement obtenir un
+        accès non autorisé à des données sensibles ou de compromettre
+        l'intégrité du système.</p><p>Il existe deux principaux types d'attaques
+        DMA :</p><ol><li><p>Attaques DMA en lecture : Dans ce type d'attaque,
+        l'attaquant accède à la mémoire du système et peut lire des informations
+        sensibles stockées dans la mémoire, comme les clés de chiffrement, les
+        mots de passe ou des données confidentielles. L'attaquant peut ensuite
+        utiliser ces informations à des fins non
+        autorisées.</p></li><li><p>Attaques DMA en écriture : Dans une attaque
+        DMA en écriture, l'attaquant injecte des données ou du code malveillant
+        dans la mémoire du système, pouvant potentiellement écraser des données
+        critiques ou modifier le comportement du système. Cela peut entraîner
+        une élévation de privilèges non autorisée, l'injection de logiciels
+        malveillants ou la modification des paramètres
+        système.</p></li></ol><p>Les attaques DMA peuvent être exécutées par
+        divers moyens, notamment l'accès physique au système cible, les
+        périphériques compromis ou l'exploitation de vulnérabilités dans le
+        micrologiciel du système ou les pilotes. Quelques exemples de vecteurs
+        d'attaque DMA comprennent FireWire, Thunderbolt, PCI Express ou les
+        interfaces PCMCIA.</p>
+      remediation: >-
+        <p>Appliquez les contre-mesures appropriées via GPO (veuillez également
+        consulter les références) :<br><br>Firewire : <br><code>Configuration
+        ordinateur &gt; Modèles administratifs &gt; Système &gt; Installation de
+        périphériques &gt; Restrictions d'installation de périphériques &gt;
+        Empêcher l'installation de périphériques utilisant des pilotes
+        correspondant à ces classes de configuration de
+        périphériques</code></p><p>Ajoutez les entrées suivantes
+        :</p><table><tbody><tr><th colspan="1"
+        rowspan="1"><p><strong>GUID</strong></p></th></tr><tr><td colspan="1"
+        rowspan="1"><p><strong>{7ebefbc0-3200-11d2-b4c2-00a0C9697d07}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{c06ff265-ae09-48f0-812c-16753d7cba83}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{d48179be-ec20-11d1-b6b8-00c04fa372a7}</strong></p></td></tr><tr><td
+        colspan="1"
+        rowspan="1"><p><strong>{6bdd1fc1-810f-11d0-bec7-08002be2092f}</strong></p></td></tr></tbody></table><p></p><p>PCIe
+        :<br><code>Configuration ordinateur &gt; Modèles administratifs &gt;
+        Composants Windows &gt; Chiffrement de lecteur BitLocker &gt; Désactiver
+        les nouveaux périphériques DMA lorsque cet ordinateur est
+        verrouillé</code></p><p>Protection générale contre les attaques DMA
+        :</p><p><code>Configuration ordinateur &gt; Modèles administratifs &gt;
+        Système &gt; Device Guard &gt; Activer la sécurité basée sur la
+        virtualisation &gt; Démarrage sécurisé avec DMA</code></p>
+      references:
+        - >-
+          https://www.synacktiv.com/en/publications/practical-dma-attack-on-windows-10.html
+        - 'https://www.scip.ch/?labs.20211209'
+      customFields: []
+  category: Sécurité du Système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres de protection LSA
+      vulnType: Test de pénétration
+      description: >-
+        <p>La Protection LSA, également connue sous le nom de RunAsPPL
+        (Protected Process Light), est une fonctionnalité de sécurité introduite
+        dans Windows 10 et Windows Server 2016. Elle vise à protéger les
+        processus critiques du système d'exploitation en les exécutant avec un
+        niveau de protection élevé.</p><p>LSA (Local Security Authority) est un
+        sous-système de Windows responsable des opérations liées à la sécurité.
+        La Protection LSA garantit que certains processus LSA critiques sont
+        isolés et exécutés dans un mode restreint appelé "Protected Process
+        Light". Ce mode offre des mesures de sécurité supplémentaires pour
+        empêcher l'accès non autorisé ou la manipulation de ces
+        processus.</p><p>Le mode Protected Process Light (PPL) restreint les
+        interactions et les privilèges d'un processus, le rendant plus résistant
+        aux attaques et aux modifications non autorisées. Les processus PPL se
+        voient attribuer un niveau d'intégrité plus élevé, ce qui rend difficile
+        pour les processus moins privilégiés ou les logiciels malveillants de
+        les manipuler. Cela contribue à protéger les fonctions système critiques
+        et les données sensibles.</p><p>En exécutant les processus LSA en tant
+        que PPL, Windows améliore la sécurité globale du système d'exploitation
+        et contribue à atténuer divers vecteurs d'attaque ciblant les processus
+        de niveau système.</p>
+      observation: <p><br><br></p>
+      remediation: >-
+        <p>Activez la protection LSA en définissant la clé de registre suivante
+        :<br><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\LSA
+        RunAsPPL= 1</code></p>
+      references:
+        - 'https://itm4n.github.io/lsass-runasppl/'
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres de chiffrement de disque
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le chiffrement de disque est une mesure de sécurité utilisée pour
+        protéger les données stockées sur un périphérique de stockage, tel qu'un
+        disque dur ou un disque SSD. Il garantit que les données restent
+        illisibles et inaccessibles aux utilisateurs non autorisés, même si le
+        périphérique est perdu, volé ou consulté sans autorisation
+        adéquate.</p><p>L'objectif principal du chiffrement de disque est de
+        chiffrer l'intégralité du contenu du disque, y compris le système
+        d'exploitation, les applications et les données utilisateur. Il empêche
+        les individus non autorisés d'accéder ou d'extraire des informations
+        sensibles à partir du disque en les chiffrant à l'aide d'un algorithme
+        cryptographique.</p><p>Une méthode pour renforcer la sécurité du
+        chiffrement de disque consiste à utiliser une authentification préalable
+        au démarrage (PBA). PBA ajoute une couche de protection supplémentaire
+        en demandant aux utilisateurs de fournir des informations
+        d'identification d'authentification avant le démarrage du système
+        d'exploitation. Cela signifie que même si quelqu'un a accès physique au
+        périphérique, il ne peut contourner le chiffrement sans fournir
+        l'authentification correcte.</p><p>L'authentification préalable au
+        démarrage implique généralement un écran de connexion ou une interface
+        distincte qui invite les utilisateurs à saisir un mot de passe ou
+        d'autres facteurs d'authentification, tels qu'un code PIN ou des données
+        biométriques (par exemple, empreinte digitale ou reconnaissance
+        faciale). Ce n'est qu'après une authentification réussie que le
+        périphérique procédera au démarrage du système d'exploitation et au
+        déchiffrement du disque.</p><p>En combinant le chiffrement de disque
+        avec l'authentification préalable au démarrage, les données sur le
+        disque chiffré restent sécurisées contre tout accès non autorisé. Même
+        si un attaquant parvient à voler ou à accéder physiquement au
+        périphérique, il devrait contourner l'authentification préalable au
+        démarrage pour accéder aux données chiffrées.</p><p>Il est important de
+        choisir des informations d'identification d'authentification solides et
+        de les mettre régulièrement à jour pour maintenir la sécurité du
+        chiffrement de disque. De plus, veiller à ce que le micrologiciel et les
+        logiciels du périphérique soient à jour contribue à se protéger contre
+        les vulnérabilités connues et assure l'efficacité des mécanismes de
+        chiffrement et d'authentification.</p>
+      remediation: >-
+        <p>Si le chiffrement vise à protéger contre des attaques sophistiquées,
+        le mode TPM uniquement pour BitLocker n'est pas suffisant. Il convient
+        de prendre en considération l'une des solutions alternatives avec un
+        code PIN supplémentaire ou un périphérique USB[2]. Une autre idée serait
+        d'utiliser des applications tierces qui donneront à l'utilisateur une
+        sensation de SSO (Single Sign-On) qui s'intègre à BitLocker.</p>
+      references:
+        - '[1] https://luemmelsec.github.io/Go-away-BitLocker-you-are-drunk/'
+        - >-
+          [2]
+          https://learn.microsoft.com/fr-fr/windows/security/information-protection/bitlocker/bitlocker-countermeasures
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres de contrôle des supports amovibles
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le contrôle des supports amovibles est une fonctionnalité de sécurité
+        qui contribue à protéger contre diverses menaces liées à l'utilisation
+        de périphériques de stockage amovibles tels que les clés USB, les
+        disques durs externes et les supports optiques. Voici une brève
+        description de la raison pour laquelle le contrôle des supports
+        amovibles est considéré comme une fonctionnalité de sécurité et des
+        menaces qu'il peut aider à atténuer :</p><ol><li><p>Accès non autorisé
+        aux données : Empêcher l'accès non autorisé aux données sensibles sur
+        les périphériques amovibles.</p></li><li><p>Introduction et propagation
+        de logiciels malveillants : Réduire le risque d'infections par des
+        logiciels malveillants et de propagation de codes malveillants via des
+        supports amovibles.</p></li><li><p>Périphériques "Bad USB" ou "Bad
+        Ethernet" se faisant passer pour des périphériques USB légitimes émulant
+        des HIDs comme un clavier ou un adaptateur réseau pour exécuter du code
+        ou capturer des identifiants de connexion.</p></li><li><p>Prévention de
+        la perte de données : Mise en œuvre de mesures pour prévenir la perte
+        accidentelle de données ou la copie non autorisée d'informations
+        sensibles.</p></li><li><p>Logiciels ou applications non autorisés :
+        Restreindre l'introduction de logiciels non autorisés sur les appareils
+        d'entreprise via des supports amovibles.</p></li><li><p>Conformité et
+        exigences réglementaires : Appliquer des politiques pour répondre aux
+        réglementations de l'industrie et démontrer la conformité en matière de
+        sécurité des données.</p></li></ol><p>En mettant en œuvre le contrôle
+        des supports amovibles en tant que fonctionnalité de sécurité, les
+        organisations peuvent atténuer les risques associés à l'accès non
+        autorisé aux données, aux infections par des logiciels malveillants, à
+        la perte de données, à l'exécution de logiciels non autorisés et à la
+        non-conformité aux réglementations. Il offre une couche de protection
+        supplémentaire pour sauvegarder les informations sensibles et maintenir
+        l'intégrité et la sécurité des systèmes et des réseaux.</p>
+      remediation: >-
+        <p>Mettre en œuvre les contre-mesures appropriées pour prévenir les
+        attaques via des supports amovibles.<br>Cela peut être fait, par
+        exemple, via les stratégies de groupe (GPO) :</p><ol><li><p>Restrictions
+        d'installation des périphériques : La stratégie de groupe peut être
+        utilisée pour limiter l'installation de périphériques USB sur les
+        ordinateurs. Elle permet aux administrateurs de définir des politiques
+        qui empêchent l'installation de périphériques USB non reconnus ou non
+        autorisés, atténuant ainsi le risque d'attaques "Bad
+        USB".</p></li><li><p>Désactivation des ports USB : La stratégie de
+        groupe permet aux administrateurs de désactiver des ports USB
+        spécifiques sur les ordinateurs. En désactivant sélectivement les ports
+        USB, les organisations peuvent limiter le risque de connexion de
+        périphériques USB non autorisés et prévenir les attaques potentielles
+        "Bad USB".</p></li><li><p>Contrôle des applications Windows Defender :
+        Le Contrôle des applications Windows Defender (WDAC) est une
+        fonctionnalité de sécurité disponible dans les éditions Windows 10
+        Entreprise et Windows Server. Elle utilise la stratégie de groupe pour
+        définir des politiques qui n'autorisent que l'exécution d'applications
+        de confiance sur un système. En appliquant des politiques strictes de
+        contrôle des applications, les organisations peuvent réduire le risque
+        d'attaques "Bad USB" en bloquant l'exécution de code non autorisé ou
+        malveillant provenant de périphériques USB.</p></li></ol><p><br></p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:L/A:N'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres de Credential Guard
+      vulnType: Test de pénétration
+      description: >-
+        <p>Credential Guard est une fonctionnalité de sécurité introduite dans
+        Windows 10 et Windows Server 2016 qui contribue à protéger contre le vol
+        d'informations d'identification et l'accès non autorisé aux informations
+        d'identification sensibles sur un système Windows. Elle est
+        spécifiquement conçue pour se défendre contre les attaques Pass-the-Hash
+        (PtH) et Pass-the-Ticket (PtT).</p><p>Les attaques de vol d'informations
+        d'identification ciblent généralement le processus d'authentification en
+        volant ou en manipulant les informations d'identification de
+        l'utilisateur, telles que les noms d'utilisateur et les mots de passe,
+        stockées en mémoire ou dans le processus d'autorité de sécurité local
+        (LSA). Ces attaques permettent aux adversaires de gagner un accès non
+        autorisé aux systèmes, aux réseaux ou aux ressources
+        sensibles.</p><p>Credential Guard utilise la sécurité basée sur la
+        virtualisation pour isoler et protéger ces informations
+        d'identification. Elle utilise la technologie de virtualisation, telle
+        que Hyper-V, pour créer un environnement isolé distinct appelé "bloc de
+        sécurité". Dans ce bloc de sécurité, les informations d'identification
+        sensibles sont stockées et traitées, les isolant ainsi du reste du
+        système, y compris du système d'exploitation et des processus
+        utilisateur.</p><p>En isolant les informations d'identification dans un
+        environnement protégé, Credential Guard contribue à prévenir l'accès ou
+        la manipulation non autorisés par des acteurs malveillants. Elle
+        garantit que même si un attaquant accède au système d'exploitation ou
+        compromet le système à un niveau inférieur, il ne peut pas accéder ou
+        extraire les informations d'identification sensibles stockées dans
+        Credential Guard.</p><p>Les principales fonctionnalités et avantages de
+        Credential Guard sont les suivants :</p><ol><li><p>Protection contre les
+        attaques Pass-the-Hash et Pass-the-Ticket.</p></li><li><p>Isolation des
+        informations d'identification dans un bloc de sécurité
+        distinct.</p></li><li><p>Utilisation de la technologie de sécurité basée
+        sur la virtualisation pour une protection
+        renforcée.</p></li><li><p>Compatibilité avec les méthodes
+        d'authentification existantes, telles que Kerberos et
+        NTLM.</p></li><li><p>Intégration avec d'autres technologies de sécurité,
+        telles que Windows Hello for Business et Windows Defender Credential
+        Guard.</p></li></ol><p>En résumé, Credential Guard renforce la posture
+        de sécurité des systèmes Windows en protégeant les informations
+        d'identification sensibles et en atténuant le risque d'attaques de vol
+        d'informations d'identification.</p>
+      remediation: >-
+        <p>Suivez les étapes fournies par Microsoft [1] pour activer Credential
+        Guard.</p>
+      references:
+        - >-
+          [1]
+          https://docs.microsoft.com/fr-fr/windows/security/identity-protection/credential-guard/credential-guard-manage
+        - 'https://blog.nviso.eu/2018/01/09/windows-credential-guard-mimikatz/'
+        - >-
+          https://blog.netwrix.com/2023/02/06/using-windows-defender-credential-guard-to-protect-privileged-credentials/
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 3
+  details:
+    - locale: FR
+      title: Paramètres d'AppLocker
+      vulnType: Test de pénétration
+      description: >-
+        <p>AppLocker est une fonctionnalité de sécurité introduite dans Windows
+        7 et Windows Server 2008 R2, disponible dans les versions ultérieures de
+        Windows. Elle est conçue pour aider les organisations à appliquer des
+        stratégies de contrôle des applications en autorisant ou bloquant
+        l'exécution d'applications et de scripts spécifiés.</p><p>AppLocker
+        permet aux administrateurs de définir des règles qui déterminent quelles
+        applications sont autorisées à s'exécuter sur un système. Ces règles
+        peuvent être basées sur divers critères, tels que le chemin du fichier,
+        la somme de contrôle du fichier, l'éditeur ou la signature numérique. En
+        configurant ces règles, les administrateurs ont un contrôle précis sur
+        les types d'applications pouvant être exécutées sur les systèmes
+        gérés.</p><p>Les principales fonctionnalités et avantages d'AppLocker
+        sont les suivants :</p><ol><li><p>Listing des applications autorisées :
+        Les administrateurs peuvent créer des règles spécifiant quelles
+        applications sont autorisées à s'exécuter, ce qui permet d'établir une
+        liste blanche d'applications approuvées. Cela contribue à empêcher
+        l'exécution de logiciels non autorisés ou malveillants sur le
+        système.</p></li><li><p>Application des règles : AppLocker applique les
+        règles configurées au niveau du système d'exploitation, garantissant que
+        seules les applications approuvées sont autorisées à s'exécuter. Cela
+        aide à protéger contre les installations de logiciels non autorisées et
+        les tentatives d'exécution.</p></li><li><p>Critères de règles flexibles
+        : Les règles peuvent être créées en fonction de divers critères, tels
+        que les attributs du fichier, les informations de l'éditeur, les
+        signatures numériques et les emplacements du chemin. Cette flexibilité
+        permet aux organisations de définir des politiques spécifiques adaptées
+        à leurs besoins.</p></li><li><p>Gestion centralisée : AppLocker peut
+        être géré via les stratégies de groupe, offrant une interface de gestion
+        centralisée pour créer, déployer et maintenir des stratégies de contrôle
+        des applications sur plusieurs systèmes.</p></li><li><p>Audit et
+        rapports : AppLocker offre des fonctionnalités d'audit pour suivre et
+        surveiller les tentatives d'exécution d'applications. Des journaux et
+        des rapports détaillés aident les administrateurs à identifier et à
+        enquêter sur les activités d'applications non autorisées ou
+        bloquées.</p></li></ol><p>AppLocker vise principalement les
+        organisations qui ont besoin d'un contrôle strict sur les logiciels
+        s'exécutant sur leurs systèmes, comme les entreprises, les agences
+        gouvernementales et les industries réglementées. Elle contribue à
+        renforcer la sécurité en empêchant l'exécution d'applications non
+        autorisées ou potentiellement malveillantes, réduisant ainsi la surface
+        d'attaque et atténuant le risque d'infections par des logiciels
+        malveillants et d'utilisation de logiciels non autorisés.</p>
+      remediation: >-
+        <p>Le cas échéant, utilisez WDAC (voir [1]).</p><p>Si ce n'est pas
+        faisable, implémentez AppLocker pour renforcer davantage le système
+        contre les attaques.</p><p>Suivez les directives fournies par Microsoft
+        [2].</p>
+      references:
+        - >-
+          [1]
+          https://docs.microsoft.com/fr-fr/windows/security/threat-protection/windows-defender-application-control/wdac-and-applocker-overview
+        - >-
+          [2]
+          https://docs.microsoft.com/fr-fr/windows/security/threat-protection/windows-defender-application-control/applocker/applocker-overview
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres DHCPv6
+      vulnType: Test de pénétration
+      description: >-
+        <p>Dans DHCPv6, l'une des vecteurs d'attaque potentiels est liée au
+        processus d'offre DHCPv6, en particulier lors de la configuration des
+        serveurs DNS. Voici une explication des attaques DHCPv6 liées au
+        paramétrage des serveurs DNS via les offres DHCPv6
+        :</p><ol><li><p>Serveur DHCPv6 frauduleux : Un attaquant peut mettre en
+        place un serveur DHCPv6 frauduleux sur le réseau pour proposer des
+        adresses de serveurs DNS malveillants dans la réponse DHCPv6. Lorsque
+        les clients demandent la configuration DHCPv6, ils peuvent recevoir une
+        offre DHCPv6 du serveur frauduleux avec des adresses de serveurs DNS
+        contrôlées par l'attaquant. Cela peut rediriger les requêtes DNS du
+        client vers des serveurs DNS malveillants sous le contrôle de
+        l'attaquant.</p></li><li><p>Spoofing DNS : En fournissant des adresses
+        de serveurs DNS malveillants dans l'offre DHCPv6, un attaquant peut
+        effectuer un détournement DNS. Lorsque les clients utilisent les
+        serveurs DNS proposés pour résoudre des noms de domaine, les serveurs
+        DNS de l'attaquant répondent avec des informations fausses ou
+        malveillantes. Cela peut conduire à rediriger les utilisateurs vers des
+        sites Web malveillants, à des attaques de phishing ou à une manipulation
+        des réponses DNS pour obtenir un accès non autorisé à des informations
+        sensibles.</p></li><li><p>Attaques MitM : La configuration du serveur
+        DNS DHCPv6 peut également être exploitée pour des attaques de l'Homme du
+        Milieu (MitM). Un attaquant peut intercepter l'offre DHCPv6 et modifier
+        les adresses de serveurs DNS pour les pointer vers son propre serveur.
+        Cela permet à l'attaquant d'intercepter les requêtes DNS et les
+        réponses, lui permettant de surveiller ou de manipuler la communication
+        entre le client et les serveurs DNS
+        légitimes.</p></li></ol><p>Normalement, les entreprises ont un serveur
+        DHCPv4 en fonctionnement, mais pas pour DHCPv6. Les versions récentes de
+        Windows sont livrées avec IPv6 activé, qui prend le pas sur IPv4. Par
+        conséquent, par défaut, ces systèmes sont susceptibles d'être
+        vulnérables aux attaques mentionnées ci-dessus.</p>
+      remediation: >-
+        <p>Pour atténuer les attaques décrites, les mesures suivantes peuvent
+        être mises en œuvre :</p><p>Désactiver IPv6 : Si IPv6 n'est pas
+        nécessaire, il est recommandé de désactiver l'interface IPv6 sur les
+        systèmes clients. Cela peut être fait via les paramètres de l'adaptateur
+        réseau ou les configurations du registre.</p><p>Privilégier IPv4 plutôt
+        que IPv6 : Les configurations réseau peuvent être ajustées pour donner
+        la priorité à la connectivité IPv4 par rapport à IPv6. Cela peut être
+        fait en modifiant les paramètres d'interface réseau ou les
+        configurations de routage réseau. Dans ces cas, la configuration IPv4
+        valide pour par exemple DNS "supplantera" le paramétrage DNS IPv6
+        frauduleux.</p><p>Faire preuve de prudence lors de la désactivation
+        d'IPv6 sur les serveurs : Microsoft déconseille de désactiver IPv6 dans
+        les environnements de serveurs, car cela pourrait entraîner des
+        perturbations des fonctionnalités critiques telles qu'Exchange ou les
+        contrôleurs de domaine. Une réflexion attentive devrait être accordée
+        avant de désactiver IPv6 sur les serveurs.</p><p>Configurer des règles
+        IPS/IDS : Des systèmes de prévention d'intrusion (IPS) ou de détection
+        d'intrusion (IDS) peuvent être configurés avec des règles
+        supplémentaires spécifiquement conçues pour détecter et atténuer les
+        attaques DHCPv6. Ces règles doivent être régulièrement mises à jour pour
+        faire face aux menaces émergentes.</p><p>Utiliser des connexions
+        chiffrées : Pour prévenir les attaques de l'Homme du Milieu, il est
+        recommandé d'utiliser des connexions chiffrées chaque fois que cela est
+        possible. Cela inclut l'utilisation de protocoles sécurisés tels que
+        HTTPS pour les communications web et la mise en œuvre de réseaux privés
+        virtuels (VPN) pour un accès distant sécurisé.</p><p>Spécifier un
+        gateway et un serveur DNS statiques : Si IPv6 est nécessaire, il est
+        conseillé de configurer et de spécifier manuellement les adresses de
+        gateway et de serveur DNS de manière statique. Cela réduit le risque
+        d'attaques liées au DNS en éliminant la dépendance à l'égard du DHCPv6
+        pour la configuration du réseau.</p>
+      references:
+        - >-
+          https://blog.fox-it.com/2018/01/11/mitm6-compromising-ipv4-networks-via-ipv6/
+        - >-
+          https://www.blackhillsinfosec.com/mitm6-strikes-again-the-dark-side-of-ipv6/
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N'
+  priority: 1
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Sécurisation du BIOS
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le Basic Input/Output System (BIOS) est un micrologiciel intégré dans
+        la carte mère d'un ordinateur. Il est responsable de l'initialisation
+        des composants matériels lors du processus de démarrage et fournit un
+        ensemble de instructions de base pour que le système d'exploitation
+        interagisse avec le matériel.</p><p>Sécuriser le BIOS avec un mot de
+        passe est important pour plusieurs raisons :</p><ol><li><p>Prévention de
+        l'accès non autorisé : La définition d'un mot de passe BIOS ajoute une
+        couche de sécurité supplémentaire à votre système informatique. Cela
+        empêche les utilisateurs non autorisés d'accéder et de modifier les
+        paramètres du BIOS critiques, tels que l'ordre de démarrage, les
+        configurations matérielles et les fonctionnalités de
+        sécurité.</p></li><li><p>Protection contre le démarrage non autorisé :
+        Un mot de passe BIOS contribue à protéger contre le démarrage non
+        autorisé du système à partir de périphériques externes, tels que les
+        clés USB ou les supports optiques. Cela garantit que seules les
+        personnes autorisées peuvent démarrer le système, réduisant ainsi le
+        risque d'accès non autorisé ou d'infections par des logiciels
+        malveillants.</p></li><li><p>Protection des données : En sécurisant le
+        BIOS, vous pouvez contribuer à protéger les données sensibles stockées
+        sur votre ordinateur. Si quelqu'un tente de manipuler les paramètres du
+        BIOS ou de retirer le disque dur, il ne pourra pas accéder aux données
+        sans le mot de passe BIOS.</p></li><li><p>Prévention des modifications
+        malveillantes du micrologiciel : La sécurisation du BIOS contribue à
+        empêcher les modifications non autorisées du micrologiciel lui-même. Des
+        acteurs malveillants pourraient potentiellement modifier le BIOS pour
+        installer des logiciels malveillants persistants ou compromettre
+        l'intégrité du système. Un mot de passe BIOS réduit le risque de
+        manipulation.</p></li><li><p>Conformité et exigences réglementaires :
+        Dans certaines industries ou organisations, la sécurisation du BIOS avec
+        un mot de passe peut être nécessaire pour se conformer aux
+        réglementations de l'industrie ou aux politiques internes de sécurité.
+        Cela démontre une approche proactive de la sécurisation des systèmes
+        informatiques et de la protection des informations
+        sensibles.</p></li></ol><p>Il est important de noter qu'un mot de passe
+        BIOS offre un niveau de sécurité, mais il n'est pas infaillible. Les
+        attaquants avancés peuvent toujours trouver des moyens de contourner ou
+        de réinitialiser le mot de passe BIOS. Cependant, la définition d'un mot
+        de passe BIOS est une pratique de sécurité recommandée qui peut
+        contribuer à atténuer le risque d'accès non autorisé et à protéger
+        l'intégrité du système.</p>
+      remediation: >-
+        <p>Un mot de passe fort et unique pour chaque système devrait être
+        utilisé.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:L/I:H/A:N'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Dossiers du chemin SYSTEM modifiables
+      vulnType: Test de pénétration
+      description: >-
+        <p>Accorder des droits d'écriture à des utilisateurs à faibles
+        privilèges sur des dossiers faisant partie de la variable du chemin
+        SYSTEM peut poser des risques de sécurité pour les raisons suivantes
+        :</p><ul><li><p>Exécution de code malveillant : Si des utilisateurs à
+        faibles privilèges peuvent écrire dans les dossiers de la variable du
+        chemin SYSTEM, ils pourraient éventuellement placer des exécutables ou
+        des scripts malveillants dans ces dossiers. Cela leur permettrait
+        d'exécuter un code arbitraire avec des privilèges élevés, contournant
+        ainsi les contrôles de sécurité.</p></li><li><p>Prise en otage de DLL :
+        En plaçant une DLL malveillante (bibliothèque de liens dynamiques)
+        portant le même nom qu'une DLL légitime utilisée par une application
+        dans l'un des dossiers modifiables, les utilisateurs à faibles
+        privilèges peuvent tromper l'application en chargeant la DLL
+        malveillante. Cela peut entraîner une exécution de code arbitraire ou
+        une élévation de privilèges.</p></li><li><p>Prise de contrôle du chemin
+        : Si les utilisateurs à faibles privilèges peuvent modifier la variable
+        du chemin SYSTEM, ils peuvent manipuler l'ordre des chemins de dossier.
+        Cela peut entraîner un comportement inattendu de l'application, car un
+        attaquant peut substituer un exécutable ou un script légitime par un
+        fichier malveillant dans un dossier où ils ont des droits
+        d'écriture.</p></li><li><p>Élévation de privilèges : L'exploitation de
+        l'accès en écriture à des dossiers de la variable du chemin SYSTEM peut
+        servir de tremplin pour une élévation de privilèges. En plaçant un
+        exécutable malveillant dans un dossier modifiable, un attaquant peut
+        tromper un utilisateur ou un processus système à privilèges supérieurs
+        pour qu'il l'exécute, ce qui lui permet de gagner potentiellement des
+        privilèges élevés.</p></li></ul>
+      remediation: >-
+        <p>Pour atténuer ces risques, il est recommandé de restreindre l'accès
+        en écriture aux dossiers de la variable du chemin SYSTEM uniquement aux
+        administrateurs de confiance ou aux utilisateurs autorisés. Les
+        utilisateurs réguliers ne devraient pas avoir de permissions d'écriture
+        sur ces dossiers pour empêcher les modifications non autorisées et les
+        potentielles violations de sécurité.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:H/A:N'
+  details:
+    - locale: FR
+      title: Paramètres WDAC
+      vulnType: Test de pénétration
+      description: >-
+        <p>Windows Defender Application Control (WDAC) est une fonctionnalité de
+        sécurité de Windows 10 qui aide à protéger les systèmes contre les
+        logiciels malveillants et l'exécution de logiciels non autorisés, et
+        succède à AppLocker. WDAC utilise des stratégies d'intégrité du code
+        pour imposer un contrôle strict sur les applications et le code pouvant
+        s'exécuter sur un appareil.</p><p>WDAC fonctionne en établissant un
+        ensemble de règles de confiance qui définissent les applications
+        autorisées à s'exécuter en fonction de facteurs tels que les signatures
+        numériques, les empreintes de fichier et d'autres critères. Ces règles
+        créent une liste blanche d'applications de confiance et empêchent
+        l'exécution de code non autorisé ou malveillant.</p><p>Avec WDAC, les
+        organisations peuvent définir et appliquer des politiques qui spécifient
+        quels logiciels sont autorisés à s'exécuter, réduisant ainsi le risque
+        d'infection par des logiciels malveillants et d'installations de
+        logiciels non autorisées. Il ajoute une couche supplémentaire de
+        protection en vérifiant l'intégrité et l'authenticité des applications
+        avant leur exécution.</p><p>WDAC exploite des technologies de sécurité
+        basées sur la virtualisation, telles que Virtual Secure Mode (VSM) et
+        des fonctionnalités de sécurité basées sur le matériel, pour fournir un
+        environnement d'exécution hautement sécurisé. Il aide à se protéger
+        contre les attaques au niveau du noyau, les injections de code et
+        d'autres techniques de logiciels malveillants avancées.</p><p>En mettant
+        en œuvre WDAC, les organisations peuvent renforcer leur posture de
+        sécurité, réduire la surface d'attaque et s'assurer que seules les
+        applications de confiance et autorisées peuvent s'exécuter sur leurs
+        appareils Windows 10.</p>
+      remediation: >-
+        <p>Activer Windows Defender Application Control (WDAC) implique
+        plusieurs étapes et nécessite des configurations spécifiques. Voici un
+        aperçu général du processus :</p><ul><li><p>Vérifier les exigences du
+        système : Assurez-vous que votre système respecte les exigences
+        matérielles et logicielles pour WDAC. Cela inclut une version compatible
+        de Windows 10 Entreprise ou de Windows Server, un processeur compatible
+        avec les extensions de virtualisation et le démarrage sécurisé
+        activé.</p></li><li><p>Créer des stratégies d'intégrité du code : WDAC
+        repose sur des stratégies d'intégrité du code pour définir les règles
+        d'exécution des applications et du code. Vous devez créer et configurer
+        ces stratégies en fonction des besoins de votre organisation. Cela
+        implique de spécifier les sources de confiance, les empreintes de
+        fichier et d'autres critères qui déterminent les applications autorisées
+        à s'exécuter.</p></li><li><p>Déployer les stratégies WDAC : Une fois les
+        stratégies d'intégrité du code définies, vous devez les déployer sur les
+        appareils cibles. Cela peut être fait à l'aide de la stratégie de
+        groupe, de Configuration Manager ou d'autres outils de déploiement.
+        Assurez-vous que les stratégies sont distribuées et appliquées
+        correctement aux appareils prévus.</p></li><li><p>Tester et valider les
+        stratégies : Il est essentiel de tester et de valider minutieusement les
+        stratégies WDAC pour s'assurer qu'elles fonctionnent comme prévu. Cela
+        inclut de vérifier que seules les applications de confiance peuvent
+        s'exécuter tandis que le code non autorisé ou malveillant est bloqué.
+        Effectuez des tests approfondis pour identifier tout conflit ou problème
+        potentiel.</p></li><li><p>Surveiller et maintenir WDAC : Après avoir
+        activé WDAC, il est essentiel de surveiller et de maintenir
+        régulièrement les stratégies. Surveillez les journaux et les événements
+        du système pour identifier les violations de stratégies ou les menaces
+        potentielles. Mettez à jour et maintenez les stratégies d'intégrité du
+        code selon les besoins pour s'adapter aux changements de votre
+        environnement.</p></li></ul><p>Il est important de noter que les étapes
+        spécifiques et les configurations pour activer WDAC peuvent varier en
+        fonction de facteurs tels que les exigences de sécurité de votre
+        organisation, l'infrastructure réseau et la configuration des appareils.
+        Il est recommandé de consulter la documentation officielle de Microsoft
+        ou de demander conseil à un professionnel de l'informatique qualifié
+        pour obtenir des instructions détaillées et des meilleures pratiques
+        adaptées à votre environnement spécifique.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Accès aux outils et paramètres système
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les outils système sur un système Windows font référence aux
+        utilitaires et applications intégrés qui fournissent diverses
+        fonctionnalités pour gérer et configurer le système d'exploitation. Ces
+        outils sont généralement conçus pour effectuer des tâches système
+        critiques, des diagnostics, du dépannage, de la configuration système et
+        de l'administration. Quelques exemples courants d'outils système sous
+        Windows comprennent l'Invite de commandes (cmd.exe), PowerShell, le
+        Gestionnaire des tâches, l'Éditeur du Registre, l'Observateur
+        d'événements, le Gestionnaire de périphériques et la Gestion des
+        disques, entre autres. Le changement des paramètres pour des éléments
+        tels que le proxy système, les règles et états du pare-feu, la
+        configuration réseau et même l'installation ou la désinstallation de
+        logiciels est appelé paramètres système.</p><p>Bien que les outils
+        système et les paramètres soient essentiels pour que les administrateurs
+        système et les utilisateurs avancés gèrent efficacement et maintiennent
+        le système, accorder l'accès à ces outils aux utilisateurs normaux peut
+        poser des problèmes de sécurité. Voici quelques raisons
+        :</p><ul><li><p>Modifications système non autorisées : Les outils
+        système ont souvent la capacité de modifier les paramètres système, les
+        configurations et les fichiers critiques. Si les utilisateurs normaux
+        ont accès à ces outils, ils peuvent modifier involontairement ou
+        malveillamment les paramètres système, entraînant une instabilité du
+        système, des problèmes de performances ou des vulnérabilités de
+        sécurité.</p></li><li><p>Élévation de privilèges : Certains outils
+        système peuvent être utilisés pour augmenter les privilèges ou exécuter
+        des commandes avec des autorisations élevées. Si les utilisateurs
+        normaux ont accès à de tels outils, ils peuvent tenter de les exploiter
+        pour obtenir un accès non autorisé ou effectuer des actions pour
+        lesquelles ils ne devraient pas avoir de
+        privilèges.</p></li><li><p>Exposition d'informations sensibles : Les
+        outils système peuvent fournir un accès à des informations système
+        sensibles, des journaux ou des fichiers pouvant contenir des données
+        confidentielles. Autoriser les utilisateurs normaux à accéder à ces
+        outils peut exposer des informations sensibles ou compromettre la
+        confidentialité des données.</p></li><li><p>Exécution de logiciels
+        malveillants : Les logiciels malveillants tentent souvent d'utiliser les
+        outils système pour effectuer leurs activités malveillantes. Accorder
+        l'accès à ces outils aux utilisateurs normaux augmente le risque
+        d'exécution involontaire de logiciels malveillants ou d'exécution de
+        commandes malveillantes.</p></li></ul><p>Pour atténuer ces problèmes de
+        sécurité, il est généralement recommandé de restreindre l'accès aux
+        outils système et aux paramètres et de limiter leur utilisation aux
+        administrateurs de confiance ou aux comptes privilégiés. Le contrôle
+        d'accès utilisateur, les paramètres d'autorisation appropriés et la mise
+        en œuvre du principe du moindre privilège peuvent contribuer à minimiser
+        le risque associé à l'accès des utilisateurs normaux aux outils
+        système.</p>
+      remediation: >-
+        <p>Restreindre autant que possible l'accès aux outils destinés
+        principalement à des fins administratives.<br>Cela peut être fait via
+        les GPO ou Intune.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H'
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Résolution de noms NetBIOS / Paramètres LLMNR
+      vulnType: Test de pénétration
+      description: >-
+        <p>La résolution de noms NetBIOS et la résolution de noms multicast
+        (LLMNR) sont des protocoles utilisés pour la résolution de noms dans les
+        réseaux Windows. Ils permettent aux appareils d'un réseau local de se
+        découvrir et de communiquer entre eux en traduisant les noms
+        d'ordinateurs en adresses IP.</p><p>Résolution de noms NetBIOS : NetBIOS
+        (Network Basic Input/Output System) est un protocole hérité utilisé pour
+        la communication entre les appareils d'un réseau local. La résolution de
+        noms NetBIOS traduit les noms NetBIOS (noms d'ordinateurs) en adresses
+        IP. Elle repose sur des messages de diffusion pour résoudre les noms, ce
+        qui peut être inefficace et présenter des risques de
+        sécurité.</p><p>LLMNR : LLMNR est un remplacement moderne de la
+        résolution de noms NetBIOS introduit dans Windows Vista et les versions
+        ultérieures. Il remplit une fonction similaire à la résolution de noms
+        NetBIOS, mais utilise des messages multicast au lieu des diffusions.
+        LLMNR est destiné à résoudre les noms sur les réseaux locaux lorsque la
+        résolution de noms DNS échoue.</p><p>Préoccupations de sécurité : La
+        résolution de noms NetBIOS et LLMNR peut introduire des risques de
+        sécurité, notamment lorsqu'ils sont activés sur des systèmes connectés à
+        des réseaux non fiables ou en dehors du réseau
+        local.</p><ul><li><p>Attaques de l'homme du milieu (MitM) : Lorsque la
+        résolution de noms NetBIOS ou LLMNR est activée, un attaquant peut
+        intercepter et répondre aux requêtes de résolution de noms, se faisant
+        passer pour l'appareil prévu. Cela leur permet de rediriger le trafic
+        réseau vers leur propre système, permettant l'écoute clandestine, la
+        capture de données ou la modification des communications
+        réseau.</p></li><li><p>Spoofing de nom et vol d'identité : En répondant
+        aux requêtes de résolution de noms, un attaquant peut potentiellement
+        usurper l'identité d'appareils légitimes sur le réseau. Cela peut
+        entraîner la confusion, l'accès non autorisé ou le vol
+        d'identité.</p></li><li><p>Divulgation d'informations : Les requêtes de
+        résolution de noms peuvent divulguer des informations sensibles, telles
+        que les noms d'ordinateurs et les informations de domaine, qui peuvent
+        être exploitées par un attaquant à des fins de reconnaissance ou
+        d'attaques ciblées.</p></li></ul><p>Pour atténuer ces problèmes de
+        sécurité, il est généralement recommandé de désactiver la résolution de
+        noms NetBIOS et LLMNR, en particulier sur les systèmes connectés à des
+        réseaux non fiables ou lorsque cela n'est pas nécessaire pour la
+        fonctionnalité du réseau local. Il est plutôt recommandé de s'appuyer
+        sur des mécanismes de résolution de noms plus sécurisés, tels que le
+        système de noms de domaine (DNS). La désactivation de ces protocoles
+        peut contribuer à réduire la surface d'attaque et à se protéger contre
+        d'éventuelles attaques MitM et autres vulnérabilités de sécurité.</p>
+      remediation: >-
+        <p>La résolution de noms NetBIOS devrait être désactivée sur tous les
+        systèmes qui n'ont pas besoin d'être compatibles avec Windows 2000 ou
+        des systèmes plus anciens. Cela peut être désactivé via DHCP ou
+        GPO.</p><p><img class="custom-image" src="64998d53b1221cb2c209eb7d"
+        alt="Paramètres NetBIOS dans le Registre"></p><p>Vous pouvez changer
+        tous les adaptateurs à 2 comme suit :</p><p><code>$regkey =
+        "HKLM:SYSTEM\CurrentControlSet\services\NetBT\Parameters\Interfaces"</code></p><p><code>Get-ChildItem
+        $regkey |foreach { Set-ItemProperty -Path "$regkey\$($_.pschildname)"
+        -Name NetbiosOptions -Value 2 -Verbose}</code></p><p>Il en va de même
+        pour LLMNR. Cependant, il ne peut être désactivé que via GPO ou un
+        script.</p><p><img class="custom-image" src="64998dceb1221cb2c209eb83"
+        alt="Paramètres GPO pour désactiver LLMNR"></p><p><code>Configuration de
+        l'ordinateur -> Modèles d'administration -> Réseau -> Client DNS ->
+        Désactiver la résolution de noms multicast</code></p>
+      references:
+        - 'https://luemmelsec.github.io/Relaying-101/'
+        - >-
+          https://woshub.com/how-to-disable-netbios-over-tcpip-and-llmnr-using-gpo/
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  details:
+    - locale: FR
+      title: Paramètres du serveur SMB
+      vulnType: Test de pénétration
+      description: >-
+        <p>SMB (Server Message Block) est un protocole réseau utilisé pour le
+        partage de fichiers et d'imprimantes entre les ordinateurs. Il existe
+        différentes versions du protocole SMB, dont SMB1 (également connu sous
+        le nom de CIFS - Common Internet File System), SMB2, SMB2.1, SMB3 et
+        SMB3.02.</p><p>La signature SMB est une fonction de sécurité qui aide à
+        protéger contre la falsification et l'accès non autorisé du trafic SMB.
+        Lorsque la signature est activée, le serveur SMB et le client signent
+        les paquets SMB, ce qui permet de vérifier l'intégrité et l'authenticité
+        des données échangées entre eux.</p><p>Voici un aperçu des versions du
+        protocole SMB et de leur prise en charge de la signature
+        :</p><ol><li><p>SMB1 (CIFS) : SMB1 prend en charge la signature des
+        messages SMB. Il fournit un niveau de sécurité de base, mais il est
+        considéré comme obsolète et moins sécurisé par rapport aux versions plus
+        récentes.</p></li><li><p>SMB2 et versions ultérieures : À partir de
+        SMB2, le protocole a introduit des améliorations significatives en
+        termes de performances et de sécurité. SMB2 prend en charge des
+        algorithmes de chiffrement plus puissants et la possibilité de négocier
+        la signature en tant que fonction de
+        sécurité.</p></li></ol><ul><li><p>SMB2.1 : Cette version ajoute la prise
+        en charge de tailles de tampon plus grandes et de meilleures
+        performances.</p></li><li><p>SMB3 : SMB3 renforce davantage la sécurité
+        et les performances. Il introduit des fonctionnalités telles que le
+        chiffrement et la reprise transparente pour une disponibilité
+        continue.</p></li><li><p>SMB3.02 : Cette version apporte des
+        améliorations pour SMB Direct, qui permet des transferts de données à
+        haute vitesse en utilisant RDMA (Remote Direct Memory
+        Access).</p></li></ul><p>Le fait de ne pas avoir la signature SMB
+        activée peut présenter des risques de sécurité, notamment dans le
+        contexte des attaques de relais. Une attaque de relais consiste en un
+        attaquant qui intercepte et transfère le trafic SMB entre un client et
+        un serveur, avec potentiellement des altérations ou une usurpation de la
+        communication.</p><p>Lorsque la signature SMB est désactivée, un
+        attaquant peut modifier les paquets SMB en transit sans détection, ce
+        qui peut permettre d'injecter un code malveillant ou de manipuler les
+        données. En activant la signature SMB, le serveur et le client peuvent
+        vérifier l'intégrité et l'authenticité du trafic SMB, réduisant ainsi le
+        risque de modification ou d'altération non autorisée.</p><p>Activer la
+        signature SMB aide à se protéger contre des attaques telles que les
+        attaques de l'homme du milieu (MitM), où un attaquant intercepte le
+        trafic SMB et le manipule pour obtenir un accès non autorisé ou extraire
+        des informations sensibles. En s'assurant que les paquets SMB sont
+        signés, la partie receveuse peut vérifier l'origine et l'intégrité des
+        données, rendant plus difficile pour un attaquant de manipuler la
+        communication.</p><p>Il est recommandé d'activer la signature SMB pour
+        une sécurité améliorée, en particulier dans les environnements où des
+        données sensibles sont transmises via des connexions SMB.</p>
+      remediation: >-
+        <p>Activer la signature SMB partout où c'est possible.</p><p>Cela peut
+        être fait, par exemple, via GPO :</p><p><code>Configuration de
+        l'ordinateur -> Stratégies -> Paramètres Windows -> Paramètres de
+        sécurité -> Options de sécurité -> "Serveur réseau Microsoft : Signer
+        numériquement les communications (toujours)"</code></p><p>Il est
+        important de tester les modifications dans un environnement contrôlé et
+        de vérifier que la signature SMB fonctionne comme prévu avant
+        d'appliquer la GPO aux systèmes de production.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres du Pare-feu Windows
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le Pare-feu Windows est une fonctionnalité de sécurité intégrée aux
+        systèmes d'exploitation Windows qui aide à protéger votre ordinateur
+        contre l'accès réseau non autorisé. Il agit comme une barrière entre
+        votre ordinateur et les réseaux externes, contrôlant le trafic réseau
+        entrant et sortant en fonction de règles prédéfinies.</p><p>Voici
+        quelques raisons pour lesquelles le Pare-feu Windows devrait être activé
+        :</p><ul><li><p>Sécurité réseau : La principale fonction du pare-feu est
+        de protéger votre ordinateur contre les activités réseau malveillantes,
+        telles que l'accès non autorisé, les tentatives de piratage, les
+        logiciels malveillants et les attaques basées sur le
+        réseau.</p></li><li><p>Blocage des connexions non autorisées : Le
+        pare-feu bloque les connexions entrantes qui ne sont pas explicitement
+        autorisées par les règles configurées. Cela empêche l'accès non autorisé
+        à votre ordinateur et contribue à protéger vos informations personnelles
+        et sensibles.</p></li><li><p>Contrôle du trafic sortant : Le pare-feu
+        surveille également et contrôle le trafic réseau sortant. Il empêche les
+        programmes potentiellement nuisibles ou les logiciels malveillants de se
+        connecter à Internet sans votre connaissance, réduisant ainsi le risque
+        de fuite de données et empêchant les communications non
+        autorisées.</p></li><li><p>Protection par défaut : Le Pare-feu Windows
+        est activé par défaut sur la plupart des installations de Windows. Le
+        maintenir activé garantit que vous disposez d'un niveau de protection de
+        base, même si vous n'avez aucune autre solution de sécurité tierce
+        installée.</p></li></ul>
+      observation: >-
+        <p>La notation dépend fortement de ce que vous avez trouvé.<br>Pare-feu
+        désactivé = Élevé<br>Pare-feu activé avec tout autorisé est identique
+        ^^<br>Pare-feu activé avec de plus grandes failles de sécurité peut être
+        moyen ...</p>
+      remediation: >-
+        <p>Pour assurer une utilisation efficace du Pare-feu Windows, il est
+        important de suivre ces meilleures pratiques :</p><ul><li><p>Activer le
+        Pare-feu : Assurez-vous toujours que le Pare-feu Windows est activé sur
+        votre ordinateur pour fournir la première ligne de défense contre les
+        accès réseau non autorisés.</p></li><li><p>Utiliser les Profils Pare-feu
+        par défaut : Le Pare-feu Windows propose des profils séparés pour
+        différents emplacements réseau (Domaine, Privé, Public). Configurez le
+        profil approprié pour chaque connexion réseau afin d'appliquer les
+        règles nécessaires en fonction du niveau de confiance du
+        réseau.</p></li><li><p>Autoriser uniquement les ports nécessaires : Par
+        défaut, le Pare-feu Windows bloque toutes les connexions entrantes. Si
+        vous avez besoin d'autoriser des services ou des applications réseau
+        spécifiques, créez des règles personnalisées pour ouvrir uniquement les
+        ports nécessaires dans les deux sens, entrant et sortant. Cela réduit la
+        surface d'attaque et minimise le risque d'accès
+        indésirable.</p></li><li><p>Mettre régulièrement à jour les règles du
+        Pare-feu : Passez régulièrement en revue et mettez à jour vos règles de
+        pare-feu pour qu'elles reflètent vos besoins réseau actuels. Supprimez
+        les règles inutiles ou obsolètes pour maintenir une configuration
+        efficace et sécurisée.</p></li></ul><p>En résumé, activer et configurer
+        correctement le Pare-feu Windows est une étape essentielle pour
+        sécuriser votre ordinateur et le protéger contre l'accès réseau non
+        autorisé et les menaces potentielles.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/best-practices-configuring
+      customFields: []
+  category: Sécurité système
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres de l'Antivirus
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le logiciel antivirus (AV), également connu sous le nom de logiciel
+        antivirus ou anti-malware, est conçu pour protéger les ordinateurs et
+        autres appareils contre les logiciels malveillants tels que les virus,
+        les vers, les chevaux de Troie, les logiciels espions, les logiciels
+        publicitaires et autres types de logiciels malveillants. Son objectif
+        principal est de détecter, prévenir et supprimer les programmes
+        malveillants qui peuvent nuire à votre système informatique ou
+        compromettre vos données.</p><p>Voici quelques raisons clés pour
+        lesquelles il est important d'avoir un logiciel antivirus activé
+        :</p><ul><li><p>Protection contre les logiciels malveillants : Le
+        logiciel antivirus analyse les fichiers, les programmes et les sites Web
+        à la recherche de signatures de logiciels malveillants connus et de
+        modèles de comportement, les empêchant d'infecter votre système. Il
+        contribue à protéger votre ordinateur contre les virus, qui peuvent
+        provoquer une perte de données, des plantages du système ou un accès non
+        autorisé.</p></li><li><p>Protection en temps réel : Le logiciel
+        antivirus assure une surveillance en temps réel des fichiers et des
+        activités sur votre ordinateur, détectant et bloquant les menaces de
+        logiciels malveillants au fur et à mesure qu'elles se produisent. Cette
+        approche proactive contribue à empêcher l'exécution et la propagation
+        des logiciels malveillants dans votre système.</p></li><li><p>Protection
+        Web : De nombreuses solutions antivirus incluent des fonctionnalités de
+        protection Web qui aident à bloquer l'accès aux sites Web malveillants
+        ou vous avertissent des sites potentiellement dangereux. Cela vous
+        protège contre les tentatives de hameçonnage, les téléchargements
+        automatiques et autres menaces liées au Web.</p></li><li><p>Protection
+        des e-mails : Le logiciel antivirus s'intègre souvent aux clients de
+        messagerie électronique pour analyser les pièces jointes entrantes et
+        sortantes à la recherche de logiciels malveillants. Il contribue à
+        empêcher la propagation de fichiers infectés par e-mail et réduit le
+        risque de tomber victime d'e-mails de phishing ou de pièces jointes
+        malveillantes.</p></li><li><p>Détection des vulnérabilités : Certains
+        logiciels antivirus incluent des fonctionnalités de balayage des
+        vulnérabilités qui identifient les failles de sécurité de votre système
+        d'exploitation ou des applications installées. En identifiant les
+        vulnérabilités, vous pouvez prendre les mesures nécessaires pour
+        corriger ou mettre à jour les logiciels, minimisant ainsi le risque
+        d'exploitation par des logiciels malveillants.</p></li><li><p>Protection
+        des données : Le logiciel antivirus aide à protéger vos informations
+        personnelles et sensibles en empêchant l'accès non autorisé ou le vol.
+        Il peut détecter les enregistreurs de frappe, les outils de capture
+        d'écran et autres types de logiciels espions qui visent à collecter vos
+        données privées.</p></li><li><p>Performance du système : Bien que le
+        logiciel antivirus effectue des tâches gourmandes en ressources telles
+        que l'analyse des fichiers et la surveillance des activités, les
+        solutions modernes sont conçues pour minimiser l'impact sur les
+        performances du système. Elles utilisent des algorithmes d'analyse
+        optimisés et exploitent l'accélération matérielle pour assurer une
+        protection efficace sans ralentir significativement votre
+        ordinateur.</p></li></ul><p>En résumé, il est crucial d'avoir un
+        logiciel antivirus activé pour maintenir un environnement informatique
+        sûr et protégé. Il aide à protéger votre système, vos données et votre
+        vie privée contre diverses menaces de logiciels malveillants,
+        garantissant une expérience numérique plus fluide et plus sécurisée.</p>
+      observation: >-
+        <p>La notation dépend fortement de ce qui est configuré.<br>L'antivirus
+        est-il activé ou non ?<br>De nombreuses exclusions peuvent être révisées
+        par n'importe qui ? Sont-elles laxistes ?<br>Toutes les fonctionnalités
+        sont-elles activées ou en manque certaines cruciales ?</p>
+      remediation: >-
+        <p>Une solution antivirus doit être installée et active sur chaque
+        système.<br>Le produit lui-même ainsi que ses signatures doivent être
+        constamment mis à jour.<br>Renforcez les systèmes autant que possible en
+        utilisant toutes les fonctionnalités fournies par votre
+        antivirus.<br>Assurez-vous que des choses comme la protection contre la
+        manipulation sont activées et ne peuvent pas être désactivées par les
+        utilisateurs normaux - idéalement, pas non plus par les
+        administrateurs.<br>Les exclusions doivent être réduites au minimum, si
+        possible individuellement par système. Vous ne devriez donc pas exclure
+        globalement un chemin x ou une application y simplement parce que vous
+        en avez besoin sur un système parmi des centaines.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Paramètres du Proxy
+      vulnType: Test de pénétration
+      description: >-
+        <p>Un serveur proxy agit comme un intermédiaire entre un client (comme
+        un ordinateur ou un appareil) et Internet. Lorsqu'un client demande une
+        ressource sur Internet, la demande passe d'abord par le serveur proxy,
+        qui transmet ensuite la demande au nom du client. Le serveur proxy peut
+        fournir différentes fonctions, notamment la mise en cache, le filtrage
+        et l'anonymisation des demandes du client.</p><p>Les principales raisons
+        d'utiliser un serveur proxy sont :</p><ul><li><p>Anonymat et
+        confidentialité : En utilisant un serveur proxy, l'adresse IP du client
+        et d'autres informations d'identification peuvent être masquées. Cela
+        aide à protéger la vie privée du client et ajoute une couche d'anonymat
+        lors de l'accès à des sites Web ou à des services en
+        ligne.</p></li><li><p>Mise en cache et performances : Les serveurs proxy
+        peuvent stocker des copies de ressources Web fréquemment consultées,
+        permettant ainsi de répondre aux demandes ultérieures pour la même
+        ressource à partir du cache. Cela réduit l'utilisation de la bande
+        passante et améliore les performances en fournissant du contenu plus
+        rapidement au client.</p></li><li><p>Filtrage du contenu et contrôle
+        d'accès : Les serveurs proxy peuvent être configurés pour filtrer le
+        contenu Web en fonction de règles prédéfinies. Cela permet aux
+        organisations de mettre en œuvre des politiques d'accès, de bloquer les
+        sites Web malveillants ou de limiter l'accès à certaines catégories de
+        contenu, renforçant ainsi la sécurité et la
+        productivité.</p></li></ul><p>Maintenant, en ce qui concerne les
+        problèmes de sécurité, le fait de ne pas utiliser de serveur proxy
+        lorsque cela est nécessaire ou recommandé peut poser plusieurs risques
+        :</p><ul><li><p>Fuites de données : Sans serveur proxy, les demandes des
+        clients sont directement envoyées au serveur de destination, révélant
+        potentiellement l'adresse IP du client et d'autres informations
+        d'identification. Ces informations peuvent être utilisées pour suivre,
+        cibler ou profiler le client.</p></li><li><p>Bypass des contrôles de
+        sécurité : Les serveurs proxy peuvent mettre en œuvre des contrôles de
+        sécurité tels que l'analyse antivirus, la détection d'intrusion ou le
+        filtrage du contenu. Le fait de ne pas utiliser de serveur proxy peut
+        contourner ces contrôles, augmentant ainsi le risque d'accéder à du
+        contenu malveillant ou inapproprié.</p></li><li><p>Exposition à du
+        contenu malveillant : Les serveurs proxy peuvent fournir une couche de
+        défense supplémentaire en analysant et en filtrant le contenu Web pour
+        détecter les logiciels malveillants ou les scripts malveillants. Sans
+        serveur proxy, les clients peuvent être plus exposés à de telles
+        menaces.</p></li><li><p>Gestion limitée de l'accès : Les serveurs proxy
+        permettent aux organisations de mettre en œuvre des politiques d'accès,
+        bloquant l'accès à des sites Web non autorisés ou limitant l'accès à des
+        ressources spécifiques. Le fait de ne pas utiliser de serveur proxy peut
+        rendre difficile la gestion et le contrôle de l'accès à Internet,
+        entraînant des problèmes potentiels de sécurité et de
+        conformité.</p></li></ul><p>En résumé, l'utilisation d'un serveur proxy
+        offre des avantages tels que la confidentialité, les performances et les
+        contrôles de sécurité. Le fait de négliger d'utiliser un serveur proxy,
+        lorsque cela est nécessaire ou conseillé, peut compromettre la
+        confidentialité, exposer les clients à des risques de sécurité et rendre
+        difficile l'application des politiques d'accès et la protection contre
+        le contenu malveillant.</p>
+      observation: >-
+        <p>La notation dépend de ce que vous avez trouvé.<br>Aucun proxy -
+        mauvais<br>Proxy, mais il ne filtre pas - mauvais<br>Essayez de
+        télécharger un logiciel malveillant via HTTP, HTTPS, dans un fichier
+        ZIP, dans un fichier ZIP chiffré, etc.</p>
+      remediation: >-
+        <p>Utilisez un serveur proxy, localement ou de manière
+        centralisée.<br>Assurez-vous de bloquer le trafic Web
+        malveillant.<br>Inspectez le trafic sécurisé pour détecter les logiciels
+        malveillants - inspection SSL.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: null
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Gestion du Cycle de Vie des Logiciels
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les logiciels et micrologiciels utilisés, ainsi que les systèmes
+        d'exploitation, doivent toujours être maintenus à jour avec les versions
+        les plus récentes.</p><p>L'utilisation de versions obsolètes présente
+        plusieurs risques de sécurité directs et indirects tels que
+        :</p><ul><li><p>Vulnérabilités de sécurité : les logiciels obsolètes
+        peuvent contenir des failles de sécurité non corrigées qui peuvent être
+        exploitées par des attaquants.</p></li><li><p>Problèmes de compatibilité
+        : le nouveau matériel ou logiciel peut ne pas être compatible avec
+        d'anciens systèmes.</p></li><li><p>Dégradation des performances : les
+        logiciels obsolètes peuvent fonctionner plus lentement, devenir moins
+        réactifs ou planter plus souvent.</p></li><li><p>Manque de
+        fonctionnalités : les nouvelles versions de logiciels peuvent comporter
+        des fonctionnalités ou des améliorations supplémentaires qui ne sont pas
+        disponibles dans les anciennes versions.</p></li><li><p>Problèmes de
+        conformité : les logiciels obsolètes peuvent ne pas être conformes aux
+        réglementations ou normes de l'industrie.</p></li></ul><p>Il est donc
+        impératif de rester à jour pour une culture de sécurité mature et cela
+        devrait faire partie du processus de gestion des correctifs.</p>
+      observation: >-
+        <p>La criticité dépend de ce qui peut être réalisé en raison de systèmes
+        et de logiciels obsolètes.</p>
+      remediation: >-
+        <p>Vérifiez si l'un des composants logiciels mentionnés peut être mis à
+        niveau / mis à jour et si des mises à jour de sécurité importantes sont
+        manquantes.<br>Mettez en place une stratégie et un processus de gestion
+        des correctifs qui garantissent que tous vos systèmes sont à jour et que
+        les mises à jour sont appliquées en temps opportun en fonction de leur
+        criticité.<br>Appliquez des contournements lorsque aucune mise à jour
+        n'est disponible pour les vulnérabilités critiques.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres RDP (Remote Desktop Protocol)
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le protocole RDP (Remote Desktop Protocol) est une technologie
+        développée par Microsoft qui permet aux utilisateurs de se connecter à
+        un ordinateur distant et de le contrôler via une connexion réseau. Il
+        permet l'accès distant à des ressources, des applications et des
+        environnements de bureau sur un système distant.</p><p>Le RDP peut être
+        pratique pour diverses utilisations, telles que l'administration à
+        distance, le support technique et les scénarios de travail à distance.
+        Cependant, s'il n'est pas correctement sécurisé, le RDP peut présenter
+        des risques pour la sécurité. Certains des risques potentiels incluent
+        :</p><ul><li><p>Accès non autorisé : Si le RDP est exposé à Internet ou
+        mal protégé, il peut devenir une cible pour des acteurs malveillants
+        tentant de gagner un accès non autorisé aux
+        systèmes.</p></li><li><p>Attaques par force brute : Les attaquants
+        peuvent lancer des attaques par force brute contre les sessions RDP, en
+        essayant différentes combinaisons de noms d'utilisateur et de mots de
+        passe pour obtenir l'accès.</p></li><li><p>Vulnérabilités : Comme tout
+        logiciel, les implémentations RDP peuvent avoir des vulnérabilités de
+        sécurité qui peuvent être exploitées par des
+        attaquants.</p></li></ul><p>L'authentification au niveau du réseau (NLA)
+        est une fonctionnalité de sécurité dans le RDP qui peut aider à atténuer
+        certains de ces risques. La NLA exige que les utilisateurs
+        s'authentifient avant d'établir une connexion de bureau à distance. Elle
+        ajoute une couche supplémentaire de sécurité en vérifiant les
+        informations d'identification de l'utilisateur avant de lui permettre
+        d'accéder au système distant. Avec la NLA activée, le système distant
+        doit authentifier l'utilisateur avant qu'une session RDP complète ne
+        soit lancée, réduisant ainsi le risque d'accès non autorisé.</p><p>En
+        activant la NLA, les risques de sécurité potentiels associés au RDP
+        peuvent être atténués, car cela permet de s'assurer que seuls les
+        utilisateurs authentifiés et autorisés peuvent établir des connexions de
+        bureau à distance. Il est recommandé de configurer le RDP avec la NLA et
+        de suivre les meilleures pratiques pour sécuriser les connexions RDP,
+        telles que l'utilisation de mots de passe forts, l'activation des
+        pare-feux réseau, le maintien à jour du logiciel RDP et la restriction
+        de l'accès aux réseaux de confiance ou à des adresses IP
+        spécifiques.</p>
+      remediation: >-
+        <p>Si possible, désactivez complètement le RDP.<br>Si ce n'est pas
+        possible, renforcez l'accès en imposant la NLA. Cela peut être fait via
+        les GPO (Objets de stratégie de groupe) ou directement via le registre
+        :</p><p><code>Configuration de l'ordinateur -> Modèles d'administration
+        -> Composants Windows -> Services Bureau à distance -> Hôte de session
+        Bureau à distance -> Sécurité -> Exiger l'authentification de
+        l'utilisateur pour les connexions distantes en utilisant
+        l'authentification au niveau du
+        réseau</code></p><p><code>Set-ItemProperty -Path
+        'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal
+        Server\WinStations\RDP-Tcp' -Name 'UserAuthentication' -Value
+        1</code><br></p><p>Assurez-vous que les comptes qui peuvent se connecter
+        à distance disposent de mots de passe solides, ou encore mieux, de
+        l'authentification multi-facteurs (MFA).</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: null
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Paramètres WinRM (Windows Remote Management)
+      vulnType: Test de pénétration
+      description: >-
+        <p>WinRM (Windows Remote Management) est une fonctionnalité de Microsoft
+        Windows qui permet la gestion et l'exécution de commandes sur des
+        systèmes Windows à distance via un réseau. Elle permet aux
+        administrateurs de gérer à distance des ordinateurs Windows en utilisant
+        PowerShell ou d'autres outils de gestion à distance.</p><p>WinRM repose
+        sur un modèle client-serveur, où le client (généralement un
+        administrateur distant) communique avec le service WinRM exécuté sur le
+        système cible pour effectuer des tâches de gestion. Cela permet aux
+        administrateurs de configurer à distance des paramètres, d'exécuter des
+        commandes, de récupérer des informations et d'effectuer d'autres tâches
+        administratives sans accéder physiquement au système.</p><p>En termes
+        d'implications en matière de sécurité, WinRM présente des risques
+        potentiels s'il n'est pas correctement configuré et sécurisé. Quelques
+        considérations clés incluent :</p><ul><li><p>Authentification et
+        autorisation : WinRM doit être configuré pour utiliser des mécanismes
+        d'authentification solides, tels que Kerberos ou SSL/TLS, pour empêcher
+        l'accès non autorisé. Des contrôles d'accès doivent être définis pour
+        limiter qui peut se connecter et quelles actions ils peuvent
+        effectuer.</p></li><li><p>Chiffrement : La communication entre le client
+        WinRM et le serveur doit être chiffrée en utilisant SSL/TLS pour
+        protéger les données sensibles et empêcher l'écoute ou la
+        falsification.</p></li><li><p>Configuration du pare-feu : Les règles de
+        pare-feu nécessaires doivent être mises en place pour autoriser le
+        trafic WinRM uniquement à partir de sources fiables et bloquer l'accès
+        non autorisé depuis le réseau.</p></li><li><p>Gestion des informations
+        d'identification : Une gestion correcte des informations
+        d'identification utilisées pour l'authentification WinRM est
+        essentielle. Le stockage et la manipulation sécurisés des informations
+        d'identification sont cruciaux pour empêcher l'accès non autorisé à des
+        informations sensibles.</p></li><li><p>Mises à jour régulières : Il est
+        important de maintenir le service WinRM et le système d'exploitation
+        sous-jacent à jour avec les derniers correctifs de sécurité pour
+        résoudre d'éventuelles vulnérabilités découvertes au fil du
+        temps.</p></li></ul><p>En tenant compte et en mettant en œuvre ces
+        mesures de sécurité, WinRM peut être utilisé efficacement tout en
+        minimisant les risques potentiels associés aux capacités de gestion à
+        distance.</p>
+      remediation: >-
+        <p>Suivez les directives indiquées dans la description pour renforcer la
+        sécurité de WinRM.<br>Si possible, désactivez complètement WinRM.</p>
+      references:
+        - >-
+          https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/winrmsecurity?view=powershell-7.3
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N'
+  priority: 4
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Chemins de services sans guillemets (Unquoted Service Paths)
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les services Windows démarrent normalement des exécutables. Le chemin
+        de l'exécutable permet au système d'exploitation de trouver le bon
+        exécutable à exécuter pour chaque service. Le chemin suivant est un
+        exemple de chemin de service sécurisé
+        :</p><p><code>"C:\Programmes\Dossier de
+        Test\bin\service.exe"</code></p><p>Le chemin suivant est un exemple de
+        chemin de service non sécurisé :</p><p><code>C:\Program Files\Dossier de
+        Test\bin\service.exe</code></p><p>Quand Windows tente de lire le chemin
+        vers cet exécutable, il interprète l'espace comme une sorte de
+        terminateur si le chemin n'est pas inclus dans <code>"</code>. Donc, il
+        tentera d'exécuter les éléments suivants (dans l'ordre)
+        :</p><p><code>C:\Program.exe</code></p><p><code>C:\Program
+        Files\Test.exe</code></p><p><code>C:\Program Files\Test\Dossier de
+        Test\bin\service.exe</code></p><p>Si les répertoires sont configurés
+        avec des autorisations inappropriées, l'attaquant peut placer un fichier
+        exécutable malveillant dans ceux-ci. Si le service est configuré pour
+        s'exécuter avec des privilèges administratifs (par exemple SYSTEM),
+        l'attaquant peut élever ses privilèges et obtenir un accès administratif
+        non autorisé au système. Dans ce cas, l'attaquant voudrait essayer
+        d'ajouter les deux premiers fichiers au système de fichiers.</p>
+      remediation: >-
+        <p>La première étape serait de demander au fournisseur de l'application
+        concernée une version mise à jour qui corrige la mauvaise
+        configuration.<br>Une solution manuelle serait de mettre le chemin
+        binaire entre guillemets manuellement.</p>
+      references:
+        - >-
+          https://www.ired.team/offensive-security/privilege-escalation/unquoted-service-paths
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Inclusion de fichiers locaux (LFI)
+      vulnType: Test de pénétration
+      description: >-
+        <p>La faille Local File Inclusion (LFI) permet à un attaquant d'inclure
+        des fichiers présents sur le serveur dans le contexte de l'application
+        web. Exploitée, cette vulnérabilité peut conduire à la divulgation
+        d'informations sensibles, à l'exécution de code distant ou même à une
+        prise de contrôle totale du serveur. Elle survient généralement lorsque
+        les entrées de l'utilisateur ne sont pas correctement validées ou
+        désinfectées.</p>
+      remediation: >-
+        <p>La correction de la vulnérabilité Local File Inclusion (LFI)
+        nécessite des mesures pour s'assurer que l'application web n'accepte et
+        n'inclut que les fichiers prévus et valides. Voici les étapes générales
+        pour corriger une faille LFI :</p><ul><li><p>Valider
+        l'entrée:</p></li></ul><p>Assurez-vous que seuls les caractères
+        alphabétiques ou numériques soient acceptés si c'est tout ce qui est
+        nécessaire.</p><ul><li><p>Utilisez des listes blanches pour définir
+        explicitement les fichiers ou ressources qui peuvent être inclus. Tout
+        ce qui n'est pas sur cette liste devrait être rejeté.</p></li></ul><p>Ne
+        permettez pas l'utilisation de ".." ou d'autres caractères qui peuvent
+        être utilisés pour naviguer dans les répertoires.</p><ul><li><p>Évitez
+        de dépendre de l'entrée utilisateur :</p></li></ul><p>Si possible,
+        évitez d'utiliser l'entrée de l'utilisateur pour déterminer les fichiers
+        à inclure. Si cela est nécessaire, assurez-vous d'utiliser une
+        validation stricte et une liste blanche comme mentionné
+        précédemment.</p><ul><li><p>Utilisez des chemins absolus
+        :</p></li></ul><p>Lorsque vous spécifiez des chemins de fichiers à
+        inclure, utilisez des chemins absolus plutôt que relatifs pour éviter
+        que des acteurs malveillants ne devinent les emplacements des
+        fichiers.</p><ul><li><p>Réduisez les privilèges
+        :</p></li></ul><p>Exécutez votre application avec le minimum de
+        privilèges nécessaire. De cette façon, même si un attaquant exploite une
+        vulnérabilité LFI, l'impact pourrait être
+        limité.</p><ul><li><p>Désactivez la fonction d'inclusion de fichiers à
+        distance (si elle est activée) :</p></li></ul><p>Par exemple, dans PHP,
+        assurez-vous que la directive allow_url_include est définie sur
+        Off.</p><ul><li><p>Mise à jour et patching
+        :</p></li></ul><p>Assurez-vous que tous vos logiciels, systèmes
+        d'exploitation et applications web sont régulièrement mis à jour. Les
+        fournisseurs publient souvent des correctifs pour les vulnérabilités
+        connues.</p><ul><li><p>Surveillez les logs :</p></li></ul><p>Surveillez
+        activement les journaux d'accès et d'erreurs de votre application et de
+        votre serveur pour détecter d'éventuelles tentatives
+        d'exploitation.</p><ul><li><p>Testez régulièrement
+        :</p></li></ul><p>Effectuez régulièrement des tests de pénétration et
+        des évaluations de vulnérabilité pour découvrir et corriger les
+        vulnérabilités avant qu'elles ne puissent être exploitées.</p><p>En
+        suivant ces recommandations, vous pouvez renforcer la sécurité de votre
+        application et atténuer les risques associés à la vulnérabilité LFI.</p>
+      references: []
+      customFields: []
+  category: Sécurité du Système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N'
+  priority: 4
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: SQL Injection (SQLI)
+      vulnType: Test de pénétration
+      description: >-
+        <p>Une injection SQL permet à un attaquant d'injecter du code SQL
+        (Structured Query Language) dans une entrée utilisateur sur une
+        application web dans le but de modifier la requête SQL envoyée à la
+        BDD.</p>
+      observation: >-
+        <p>Cette vulnérabilité peut avoir un impacte sur la confidentialité des
+        données des utilisateurs. En effet, une exploitation réussi de cette
+        vulnérabilité peut permettre à un attaquant de récupérer toute les
+        données présentent dans la base de données avec laquelle l'application
+        web communique.</p>
+      remediation: >-
+        <p>Il est recommandé d'utiliser des requêtes dites préparés pour éviter
+        qu'un attaquant injecte du code SQL dans la requête envoyée au serveur
+        WEB.</p>
+      references:
+        - 'https://www.php.net/manual/en/security.database.sql-injection.php'
+      customFields: []
+  category: Sécurité du Système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Vulnérabilité dans le service HTTP
+      vulnType: Test de pénétration
+      description: >-
+        <p>Une vulnérabilité a été découverte dans le service HTTP d'une
+        application. Le service HTTP est vulnérable à une attaque d'exécution de
+        code à distance en raison d'une faille de sécurité dans le traitement
+        des requêtes HTTP.</p><p>Un attaquant distant pourrait exploiter cette
+        vulnérabilité en envoyant une requête HTTP spécialement conçue, ce qui
+        permettrait d'exécuter du code malveillant sur le serveur distant. Cela
+        pourrait conduire à la prise de contrôle complète du serveur et à
+        l'exfiltration de données sensibles.</p><p>Il est fortement recommandé
+        de corriger cette vulnérabilité en appliquant les mises à jour de
+        sécurité fournies par le fournisseur du logiciel. En attendant la mise à
+        jour, il est recommandé de mettre en place des mesures de sécurité
+        supplémentaires, telles que la configuration d'un pare-feu pour limiter
+        l'accès au service HTTP, ou la désactivation temporaire du service si
+        cela est possible sans affecter l'activité normale.</p>
+      remediation: >-
+        <p>Appliquez les mises à jour de sécurité fournies par le fournisseur du
+        logiciel pour corriger la vulnérabilité. Si aucune mise à jour n'est
+        disponible, envisagez de mettre en place des mesures de sécurité
+        supplémentaires pour limiter l'accès au service HTTP, telles que la
+        configuration d'un pare-feu, ou désactivez temporairement le service si
+        cela est possible sans perturber les opérations normales.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Vulnérabilité dans le service de base de données
+      vulnType: Test de pénétration
+      description: >-
+        <p>Une vulnérabilité a été identifiée dans le service de base de données
+        d'une application. Le service de base de données est vulnérable à une
+        attaque d'injection SQL en raison d'une validation insuffisante des
+        entrées utilisateur dans les requêtes SQL.</p><p>Un attaquant pourrait
+        exploiter cette vulnérabilité en soumettant des données spécialement
+        conçues dans les champs de formulaire, ce qui pourrait permettre
+        l'exécution de requêtes SQL malveillantes. Cela pourrait conduire à la
+        divulgation d'informations sensibles ou à la manipulation de la base de
+        données.</p><p>Il est recommandé de corriger cette vulnérabilité en
+        mettant en œuvre une validation stricte des entrées utilisateur et en
+        utilisant des requêtes préparées ou d'autres méthodes sécurisées pour
+        interagir avec la base de données. De plus, assurez-vous que toutes les
+        mises à jour de sécurité sont appliquées et que les pratiques de codage
+        sécurisé sont suivies.</p>
+      remediation: >-
+        <p>Mettez en œuvre une validation stricte des entrées utilisateur pour
+        prévenir les attaques d'injection SQL. Utilisez des requêtes préparées
+        ou d'autres méthodes sécurisées pour interagir avec la base de données.
+        Appliquez toutes les mises à jour de sécurité fournies par le
+        fournisseur du logiciel. Suivez également les meilleures pratiques de
+        codage sécurisé pour éviter ce type de vulnérabilité à l'avenir.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Faiblesse des mots de passe
+      vulnType: Test de pénétration
+      description: >-
+        <p>Des mots de passe faibles ou faciles à deviner ont été identifiés
+        pour plusieurs comptes utilisateur au sein du système. Les mots de passe
+        faibles peuvent être devinés facilement par des attaquants, exposant les
+        comptes à des risques de compromission.</p><p>Les conséquences de
+        l'utilisation de mots de passe faibles comprennent le vol d'identité,
+        l'accès non autorisé aux systèmes et aux données sensibles, ainsi que la
+        possibilité de mener des attaques de force brute ou de dictionnaire pour
+        accéder aux comptes utilisateur.</p><p>Pour remédier à cette
+        vulnérabilité, il est crucial d'éduquer les utilisateurs sur les bonnes
+        pratiques de création de mots de passe forts, d'exiger l'utilisation de
+        mots de passe complexes et de mettre en place des politiques de
+        verrouillage de compte après un certain nombre de tentatives
+        infructueuses. La mise en œuvre de l'authentification à deux facteurs
+        (2FA) peut également renforcer la sécurité des comptes.</p>
+      remediation: >-
+        <p>Exigez des politiques de mot de passe solides, comprenant des
+        combinaisons de lettres majuscules et minuscules, de chiffres et de
+        caractères spéciaux. Mettez en place des mécanismes de verrouillage de
+        compte après un certain nombre de tentatives infructueuses. Encouragez
+        les utilisateurs à ne pas réutiliser les mêmes mots de passe sur
+        différents comptes et à utiliser des gestionnaires de mots de passe pour
+        stocker en toute sécurité leurs informations d'identification.
+        Considérez également l'implémentation de l'authentification à deux
+        facteurs (2FA) pour renforcer la sécurité des comptes.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Cross-Site Scripting (XSS)
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application web présente une vulnérabilité de type Cross-Site
+        Scripting (XSS), qui permet aux attaquants d'injecter du code JavaScript
+        malveillant dans les pages web affichées aux utilisateurs.</p> <p>Cela
+        peut entraîner le vol de cookies de session, la redirection vers des
+        sites malveillants, le vol d'informations sensibles ou la compromission
+        des comptes utilisateur.</p>
+      remediation: >-
+        <p>Validez et encodez correctement les entrées utilisateur avant de les
+        afficher sur les pages web. Utilisez des mécanismes de sécurité tels que
+        les Content Security Policies (CSP) pour limiter l'exécution de scripts
+        non autorisés sur les pages web.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:N'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Faille de Sécurité des Sessions
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application ne gère pas correctement les sessions utilisateur, ce
+        qui peut entraîner des problèmes de sécurité tels que l'accès non
+        autorisé à des comptes, le vol de session et la compromission des
+        données sensibles.</p><p>Les attaquants peuvent exploiter cette faille
+        pour accéder à des comptes utilisateur, effectuer des actions en tant
+        qu'utilisateur authentifié et accéder à des informations
+        confidentielles.</p>
+      remediation: >-
+        <p>Mettez en œuvre une gestion robuste des sessions, en utilisant des
+        mécanismes d'authentification et de validation appropriés. Générez des
+        jetons de session aléatoires et associez-les à des durées de vie
+        limitées. Utilisez des mécanismes de validation des requêtes pour
+        empêcher les attaques de type CSRF.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:N/A:N'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Exposition d'Informations Sensibles
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application expose des informations sensibles telles que des
+        messages d'erreur détaillés, des commentaires de développement ou des
+        informations de débogage, qui pourraient aider les attaquants à cibler
+        les vulnérabilités et à préparer des attaques ciblées.</p><p>Cela peut
+        compromettre la sécurité de l'application en fournissant des
+        informations précieuses aux attaquants.</p>
+      remediation: >-
+        <p>Configurez l'application pour qu'elle ne révèle pas d'informations
+        sensibles dans les messages d'erreur ou les réponses. Utilisez des
+        journaux d'audit et des mécanismes de détection pour surveiller les
+        activités suspectes.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 4
+  remediationComplexity: 3
+  details:
+    - locale: FR
+      title: Insecure Deserialization
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application présente une vulnérabilité d'insecure deserialization,
+        qui permet aux attaquants de manipuler et d'exploiter les mécanismes de
+        sérialisation pour exécuter du code malveillant à distance.</p><p>Cela
+        peut entraîner l'exécution de code non autorisé, la compromission du
+        serveur et la fuite de données sensibles.</p>
+      remediation: >-
+        <p>Utilisez des mécanismes de sérialisation sécurisés et évitez de
+        désérialiser des données non fiables. Mettez en œuvre des contrôles
+        d'accès et des mécanismes de validation pour prévenir les attaques
+        d'insecure deserialization.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 4
+  remediationComplexity: 3
+  details:
+    - locale: FR
+      title: Accès Non Autorisé aux Ressources
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application ne dispose pas de mécanismes adéquats de contrôle
+        d'accès aux ressources. Cela peut entraîner un accès non autorisé à des
+        fonctionnalités, des données ou des fichiers sensibles par des
+        utilisateurs non autorisés.</p><p>Les attaquants pourraient exploiter
+        cette faille pour accéder à des informations confidentielles, exécuter
+        des opérations malveillantes ou compromettre l'intégrité des
+        données.</p>
+      remediation: >-
+        <p>Mettez en place des mécanismes de contrôle d'accès granulaires basés
+        sur les rôles et les permissions. Effectuez des tests approfondis de
+        contrôle d'accès pour identifier et corriger les vulnérabilités.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H'
+  priority: 4
+  remediationComplexity: 3
+  details:
+    - locale: FR
+      title: Dépassement de Tampon (Buffer Overflow)
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application présente une vulnérabilité de type dépassement de
+        tampon, qui peut être exploitée pour écrire des données malveillantes
+        au-delà de la zone mémoire tampon allouée. Cela peut conduire à
+        l'exécution de code malveillant, à des plantages de l'application ou à
+        une compromission du système.</p>
+      remediation: >-
+        <p>Audit et validez toutes les entrées utilisateur et assurez-vous que
+        les tampons sont correctement gérés. Utilisez des mécanismes de sécurité
+        tels que les canaries et les mécanismes ASLR pour atténuer les risques
+        de dépassement de tampon.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Faille de Redirection et de Transfert de Confiance
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application permet des redirections non validées et des transferts
+        de confiance non sécurisés. Les attaquants peuvent exploiter cette
+        faille pour rediriger les utilisateurs vers des sites malveillants,
+        voler des informations d'authentification et mener des attaques de
+        phishing.</p>
+      remediation: >-
+        <p>Validez et encodez correctement les URL de redirection. Utilisez des
+        mécanismes tels que les jetons anti-CSRF et les liens de connexion
+        uniques pour sécuriser les transferts de confiance.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Cross-Site Request Forgery (CSRF)
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application web présente une vulnérabilité de type Cross-Site
+        Request Forgery (CSRF), qui permet aux attaquants de forcer les
+        utilisateurs authentifiés à effectuer des actions non intentionnelles
+        sans leur consentement.</p><p>Cela peut entraîner la modification non
+        autorisée des paramètres de compte, la suppression de données ou
+        l'exécution d'actions malveillantes en exploitant la confiance des
+        utilisateurs envers le site.</p>
+      remediation: >-
+        <p>Mettez en œuvre des mécanismes anti-CSRF tels que la vérification des
+        jetons CSRF (CSRF tokens) et/ou l'utilisation de double validation pour
+        les actions sensibles. Éduquez les utilisateurs sur les risques de clics
+        sur des liens ou des actions non sollicités.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H'
+  priority: 3
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Déni de Service (DoS)
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application est vulnérable aux attaques de déni de service (DoS),
+        où les attaquants cherchent à saturer les ressources de l'application
+        pour la rendre inutilisable. Cela peut entraîner l'indisponibilité du
+        service, des perturbations opérationnelles et des pertes
+        financières.</p>
+      remediation: >-
+        <p>Mettez en place des mécanismes de surveillance et de détection des
+        attaques DoS, tels que des systèmes de prévention d'intrusion (IPS) ou
+        des services de protection anti-DDoS. Optimisez la configuration et les
+        ressources du serveur pour résister à des pics de trafic anormaux.</p>
+      references: []
+      customFields: []
+  category: Sécurité réseau
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Bypass de l'Authentification
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application permet aux attaquants de contourner le mécanisme
+        d'authentification, leur permettant ainsi d'accéder à des
+        fonctionnalités ou à des ressources restreintes sans fournir les
+        informations d'identification appropriées.</p>
+      remediation: >-
+        <p>Renforcez les mécanismes d'authentification en utilisant des
+        pratiques de sécurité recommandées. Utilisez des protocoles
+        d'authentification forts, tels que l'authentification à deux facteurs
+        (2FA), et assurez-vous que les contrôles d'accès sont correctement
+        configurés.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Exécution de Code à Distance (RCE)
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application est vulnérable à une attaque d'exécution de code à
+        distance (RCE), permettant aux attaquants d'injecter et d'exécuter du
+        code malveillant sur le serveur distant.</p> <p>Cela peut entraîner la
+        compromission complète du serveur et l'exécution d'opérations non
+        autorisées.</p>
+      remediation: >-
+        <p>Mettez à jour les bibliothèques et les frameworks utilisés pour
+        éliminer les vulnérabilités connues. Appliquez des mécanismes de
+        sécurité pour filtrer et désinfecter les entrées utilisateur. Mettez en
+        place une isolation appropriée pour limiter les impacts potentiels d'une
+        attaque RCE.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Faille de Sécurité d'Authentification de Base de Données
+      vulnType: Test de pénétration
+      description: >-
+        <p>La base de données présente une vulnérabilité de sécurité
+        d'authentification, permettant aux attaquants de contourner les
+        mécanismes d'authentification et d'accéder à la base de données avec des
+        privilèges élevés.</p>
+      remediation: >-
+        <p>Mettez en place des mécanismes d'authentification robustes et des
+        contrôles d'accès stricts pour la base de données. Assurez-vous que les
+        informations d'identification sont correctement gérées et stockées de
+        manière sécurisée.</p>
+      references: []
+      customFields: []
+  category: Sécurité des bases de données
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 1
+  details:
+    - locale: FR
+      title: Vulnérabilité de Sécurité de Fichier Non Sécurisé
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'application expose des fichiers sensibles sur le système de
+        fichiers ou permet l'accès à des fichiers sans contrôles d'accès
+        appropriés, ce qui peut conduire à la divulgation d'informations
+        sensibles ou à des opérations non autorisées.</p>
+      remediation: >-
+        <p>Configurez correctement les permissions d'accès aux fichiers et aux
+        répertoires. Vérifiez et limitez les informations sensibles stockées
+        dans les fichiers exposés. Utilisez des contrôles d'accès basés sur les
+        rôles pour restreindre l'accès aux fichiers sensibles.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Vulnérabilité de Sécurité de Configuration de Serveur
+      vulnType: Test de pénétration
+      description: >-
+        <p>Le serveur est mal configuré et expose des services, des ports ou des
+        paramètres de sécurité vulnérables, permettant aux attaquants de
+        compromettre le serveur ou d'accéder à des données sensibles.</p>
+      remediation: >-
+        <p>Audit et configurez correctement la sécurité du serveur en suivant
+        les meilleures pratiques. Désactivez les services non nécessaires et
+        mettez en place des règles de pare-feu pour limiter l'accès aux ports et
+        aux services.</p>
+      references: []
+      customFields: []
+  category: Sécurité réseau
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Vulnérabilités des Systèmes d'Exploitation
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les systèmes d'exploitation peuvent contenir des vulnérabilités de
+        sécurité qui peuvent être exploitées par des attaquants pour obtenir un
+        accès non autorisé, exécuter du code malveillant ou compromettre la
+        sécurité du système.</p> <p>Ces vulnérabilités peuvent être liées à des
+        erreurs de programmation, des bogues ou des failles de sécurité non
+        corrigées.</p>
+      remediation: >-
+        <p>Appliquez régulièrement les mises à jour de sécurité et les
+        correctifs du système d'exploitation. Suivez les recommandations du
+        fournisseur pour sécuriser et configurer correctement le système
+        d'exploitation.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Manque de Gestion des Logs
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'absence d'une gestion adéquate des logs et des journaux
+        d'événements peut rendre difficile la détection d'activités
+        malveillantes ou d'incidents de sécurité. Sans logs appropriés, il est
+        difficile de retracer les actions des utilisateurs ou d'identifier les
+        attaques.</p>
+      remediation: >-
+        <p>Mettez en place une stratégie de gestion des logs. Collectez, stockez
+        et analysez les logs de manière centralisée. Surveillez régulièrement
+        les journaux pour détecter les activités suspectes et mettez en place
+        des alertes en cas d'incidents.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Failles dans les Bibliothèques Tierces
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les applications utilisent souvent des bibliothèques tierces pour des
+        fonctionnalités spécifiques. Cependant, ces bibliothèques peuvent
+        contenir des vulnérabilités de sécurité qui peuvent être exploitées par
+        des attaquants pour compromettre la sécurité de l'application.</p>
+      remediation: >-
+        <p>Maintenez les bibliothèques tierces à jour en appliquant les
+        correctifs de sécurité fournis par les fournisseurs. Effectuez une
+        analyse de vulnérabilités pour identifier les vulnérabilités connues
+        dans les bibliothèques utilisées.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 2
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Faiblesse dans la Gestion des Sessions
+      vulnType: Test de pénétration
+      description: >-
+        <p>Une mauvaise gestion des sessions peut permettre aux attaquants de
+        voler ou de deviner les identifiants de session, accédant ainsi aux
+        comptes d'utilisateurs légitimes. Cela peut également entraîner la prise
+        de contrôle de comptes d'utilisateur et la violation de la
+        confidentialité.</p>
+      remediation: >-
+        <p>Mettez en œuvre des mécanismes de gestion des sessions sécurisés.
+        Utilisez des jetons de session uniques, expirez les sessions inactives
+        et assurez-vous que les informations d'identification ne sont pas
+        transmises en clair.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Failles dans les Protocoles de Communication
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'utilisation de protocoles de communication non sécurisés peut
+        exposer les données sensibles à des attaques d'interception et de
+        manipulation. Les attaquants peuvent exploiter les vulnérabilités dans
+        les protocoles pour voler des informations, compromettre la
+        confidentialité et exécuter des attaques man-in-the-middle.</p>
+      remediation: >-
+        <p>Utilisez des protocoles de communication sécurisés, tels que HTTPS,
+        TLS et SSH. Désactivez les protocoles obsolètes ou non sécurisés.</p>
+      references: []
+      customFields: []
+  category: Sécurité réseau
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Injection de Commandes (Command Injection)
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les vulnérabilités d'injection de commandes permettent aux attaquants
+        d'injecter du code malveillant dans des entrées utilisateur non
+        filtrées, ce qui peut entraîner l'exécution de commandes système non
+        autorisées. Cela peut compromettre la sécurité du système et permettre
+        aux attaquants d'exécuter des opérations non autorisées.</p>
+      remediation: >-
+        <p>Validez et filtrez soigneusement toutes les entrées utilisateur.
+        Utilisez des mécanismes de séparation des données et des commandes pour
+        empêcher les attaques d'injection. Évitez l'utilisation d'entrées
+        utilisateur directement dans les commandes système.</p>
+      references: []
+      customFields: []
+  category: Sécurité applicative
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Élévation de Privilèges Windows via Faille de Service
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les vulnérabilités dans les services Windows peuvent permettre à un
+        attaquant de prendre le contrôle d'un service en exécutant du code
+        malveillant avec des privilèges élevés. Cela peut lui donner un accès
+        privilégié au système et à ses ressources.</p>
+      remediation: >-
+        <p>Mettez à jour les services vulnérables avec les correctifs de
+        sécurité. Désactivez les services non utilisés. Appliquez le principe de
+        moindre privilège en limitant les droits d'accès aux services.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Élévation de Privilèges Linux via Sudo Inadéquat
+      vulnType: Test de pénétration
+      description: >-
+        <p>Une configuration incorrecte de sudo peut permettre à des
+        utilisateurs non autorisés d'exécuter des commandes en tant que
+        superutilisateur. Cela peut conduire à une élévation de privilèges et
+        donner aux attaquants un accès complet au système.</p>
+      remediation: >-
+        <p>Assurez-vous que les règles sudo sont correctement configurées pour
+        limiter l'accès aux commandes et aux utilisateurs autorisés. Évitez
+        d'utiliser la règle "ALL=(ALL:ALL) ALL" qui donne un accès complet.
+        Restreignez l'utilisation de sudo aux commandes spécifiques.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Bypass UAC (User Account Control) sous Windows
+      vulnType: Test de pénétration
+      description: >-
+        <p>L'UAC (User Account Control) est une fonctionnalité de sécurité de
+        Windows qui demande une confirmation d'élévation de privilèges à
+        l'utilisateur. Cependant, des vulnérabilités peuvent permettre à un
+        attaquant de contourner l'UAC et d'exécuter des commandes avec des
+        privilèges élevés.</p>
+      remediation: >-
+        <p>Mettez à jour Windows avec les derniers correctifs de sécurité.
+        Utilisez les principes de moindre privilège et de séparation des tâches.
+        Utilisez les stratégies GPO pour renforcer l'UAC et empêcher les
+        contournements.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Élévation de Privilèges Linux via Vulnérabilité du Noyau
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les vulnérabilités du noyau Linux peuvent permettre à un attaquant
+        d'exécuter du code malveillant avec des privilèges élevés, contournant
+        ainsi les contrôles de sécurité du système. Cela peut compromettre la
+        sécurité du système tout entier.</p>
+      remediation: >-
+        <p>Mettez à jour le noyau Linux avec les derniers correctifs de
+        sécurité. Surveillez les annonces de vulnérabilités du noyau et
+        appliquez rapidement les correctifs. Utilisez également les mécanismes
+        de confinement du noyau, tels que SELinux ou AppArmor.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
+- cvssv3: 'CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H'
+  priority: 1
+  remediationComplexity: 2
+  details:
+    - locale: FR
+      title: Élévation de Privilèges sous Windows via Faille d'Impersonation
+      vulnType: Test de pénétration
+      description: >-
+        <p>Les vulnérabilités d'impersonation permettent à un attaquant
+        d'usurper l'identité d'un autre utilisateur ou compte, donnant ainsi
+        accès à des ressources ou des opérations normalement inaccessibles. Cela
+        peut conduire à une élévation de privilèges.</p>
+      remediation: >-
+        <p>Mettez à jour les logiciels et le système avec les derniers
+        correctifs. Limitez les privilèges des utilisateurs pour minimiser
+        l'impact de l'usurpation d'identité. Utilisez la séparation des
+        privilèges pour éviter que les comptes normaux aient un accès
+        excessif.</p>
+      references: []
+      customFields: []
+  category: Sécurité système
