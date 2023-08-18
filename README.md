@@ -5,7 +5,7 @@ Vous y trouverez un tutoriel d'explication pour l'installation de Pwndoc-ng, un 
 
 ## Tutoriel d'Installation de Pwndoc-ng
 
-Le fichier tutorial_installation.md contient un guide rapide pour installer et configurer Pwndoc-ng. Suivez les étapes décrites pour mettre en place l'outil et simplifier votre processus de documentation.
+Le fichier tuto contient un guide rapide pour installer et configurer Pwndoc-ng. Suivez les étapes décrites pour mettre en place l'outil et simplifier votre processus de documentation.
 
 ## Template de Write-up
 
