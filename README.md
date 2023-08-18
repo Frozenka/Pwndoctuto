@@ -1,4 +1,4 @@
-Ressources de la video Youtube : https://youtu.be/QnkKjE41dwc
+Ressources de la video Youtube : https://youtu.be/Uu8qZcODD_A 
 
 Bienvenue dans ce référentiel dédié à la video youtube sur l'installation et la configuration de Pwndoc-ng ! 
 Vous y trouverez un tutoriel d'explication pour l'installation de Pwndoc-ng, un template pour simplifier la rédaction de vos write-ups, ainsi qu'une liste d'environ 70 vulnérabilités en français pour vous aider dans vos CTF et pentests.
