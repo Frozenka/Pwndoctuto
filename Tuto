@@ -1,0 +1,28 @@
+1 Installation Pwndoc-ng :
+cd /opt
+git clone https://github.com/pwndoc-ng/pwndoc-ng.git
+cd pwndoc-ng
+sudo docker-compose up -d --build
+sudo docker-compose stop
+sudo docker-compose start
+https://localhost:8443
+(accepté le certificat)
+
+2 Configuration Pwndoc-ng  :
+Modèles: 
+Création d'un model (Writup) et upload du fichier "template.docx"
+
+Données personnalisées => Sections personnalisées : 
+pseudo
+img
+reconnaissance
+foothold
+privsc
+
+Champs Personnalisés => section audit => Chaque section ( Pseudo,img ect ect ..) => label =  text  
+( ATTENTION Mettre input pour Pseudo et Editor pour les autres )
+
+Type D'audit :  ajout des sections
+
+
+Lien Video : https://www.youtube.com/@FrozenKwa/
